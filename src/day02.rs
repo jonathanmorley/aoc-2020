@@ -1,6 +1,6 @@
-use std::convert::TryInto;
+use std::str::FromStr;
 
-use aoc_runner_derive::{aoc, aoc_generator};
+use aoc_runner_derive::aoc;
 use recap::Recap;
 use serde::Deserialize;
 
@@ -15,83 +15,85 @@ use serde::Deserialize;
     (?P<password>\S+)
   "#)]
 pub struct PasswordValidator {
-  number_1: u32,
-  number_2: u32,
-  character: char,
-  password: String
+    number_1: usize,
+    number_2: usize,
+    character: char,
+    password: String,
 }
 
 impl PasswordValidator {
-  fn valid_by_count(&self) -> bool {
-    let count = self.password.matches(self.character).count();
-    count >= self.number_1.try_into().unwrap() && count <= self.number_2.try_into().unwrap()
-  }
+    fn valid_by_count(&self) -> bool {
+        let count = self.password.matches(self.character).count();
+        count >= self.number_1 && count <= self.number_2
+    }
 
-  fn valid_by_index(&self) -> bool {
-    let index_1: usize = (self.number_1 - 1).try_into().unwrap();
-    let index_2: usize = (self.number_2 - 1).try_into().unwrap();
+    // This is 1-indexed
+    fn has_char_at_index(&self, idx: usize) -> bool {
+        self.password.char_indices().nth(idx - 1).map(|x| x.1) == Some(self.character)
+    }
 
-    let valid_1 = self.password.char_indices().nth(index_1) == Some((index_1, self.character));
-    let valid_2 = self.password.char_indices().nth(index_2) == Some((index_2, self.character));
-        
-    valid_1 ^ valid_2
-  }
+    fn valid_by_index(&self) -> bool {
+        self.has_char_at_index(self.number_1) ^ self.has_char_at_index(self.number_2)
+    }
 }
 
-#[aoc_generator(day2)]
-pub fn parse(input: &str) -> Vec<PasswordValidator> {
+pub fn parse(input: &str) -> impl Iterator<Item=PasswordValidator> + '_ {
     input
         .lines()
-        .filter(|&s| !s.is_empty())
-        .map(|s| s.parse())
+        .map(FromStr::from_str)
         .map(|x| x.unwrap())
-        .collect()
 }
 
 #[aoc(day2, part1)]
-pub fn part_1(input: &[PasswordValidator]) -> usize {
-    input
-      .into_iter()
-      .filter(|&x| x.valid_by_count())
-      .count()
+pub fn part_1(input: &str) -> usize {
+    parse(input).filter(|x| x.valid_by_count()).count()
 }
 
 #[aoc(day2, part2)]
-pub fn part_2(input: &[PasswordValidator]) -> usize {
-    input
-      .into_iter()
-      .filter(|&x| x.valid_by_index())
-      .count()
+pub fn part_2(input: &str) -> usize {
+    parse(input).filter(|x| x.valid_by_index()).count()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    static SAMPLE: &str = r#"
-1-3 a: abcde
-1-3 b: cdefg
-2-9 c: ccccccccc
-"#;
+    static SAMPLE: &str = "1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc";
 
     #[test]
     fn test_parse() {
-        assert_eq!(parse(SAMPLE), vec!(
-          PasswordValidator { number_1: 1, number_2: 3, character: 'a', password: "abcde".into() },
-          PasswordValidator { number_1: 1, number_2: 3, character: 'b', password: "cdefg".into() },
-          PasswordValidator { number_1: 2, number_2: 9, character: 'c', password: "ccccccccc".into() }
-        ));
+        assert_eq!(
+            parse(SAMPLE).collect::<Vec<_>>(),
+            vec!(
+                PasswordValidator {
+                    number_1: 1,
+                    number_2: 3,
+                    character: 'a',
+                    password: "abcde".into()
+                },
+                PasswordValidator {
+                    number_1: 1,
+                    number_2: 3,
+                    character: 'b',
+                    password: "cdefg".into()
+                },
+                PasswordValidator {
+                    number_1: 2,
+                    number_2: 9,
+                    character: 'c',
+                    password: "ccccccccc".into()
+                }
+            )
+        );
     }
 
     #[test]
     fn test_part_1() {
-        let answer = part_1(&parse(SAMPLE));
-        assert_eq!(answer, 2);
+        assert_eq!(part_1(SAMPLE), 2);
     }
 
     #[test]
     fn test_part_2() {
-        let answer = part_2(&parse(SAMPLE));
-        assert_eq!(answer, 1);
+        assert_eq!(part_2(SAMPLE), 1);
     }
 }

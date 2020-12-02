@@ -1,49 +1,44 @@
+use std::str::FromStr;
+use std::{collections::HashSet, num::ParseIntError};
+
 use aoc_runner_derive::{aoc, aoc_generator};
 
-use std::collections::HashSet;
-use std::str::FromStr;
-
 #[aoc_generator(day1)]
-pub fn parse(input: &str) -> HashSet<u32> {
-    input
-        .lines()
-        .filter(|&s| !s.is_empty())
-        .map(u32::from_str)
-        .map(|x| x.unwrap())
-        .collect()
+pub fn parse(input: &str) -> Result<HashSet<u32>, ParseIntError> {
+    input.lines().map(FromStr::from_str).collect()
 }
 
 #[aoc(day1, part1)]
 pub fn part_1(input: &HashSet<u32>) -> Option<u32> {
     for &x in input {
-        if x < 2020/2 {
+        if x < 2020 / 2 {
             if let Some(complement) = complement(x) {
                 if input.contains(&complement) {
-                    return Some(x * complement)
+                    return Some(x * complement);
                 }
             }
         }
     }
-    
+
     None
 }
 
 #[aoc(day1, part2)]
 pub fn part_2(input: &HashSet<u32>) -> Option<u32> {
     for &x in input {
-        if x < 2020/3 {
+        if x < 2020 / 3 {
             for &y in input {
-                if y > 2020/3 {
+                if y > 2020 / 3 {
                     if let Some(complement) = complement(x + y) {
                         if input.contains(&complement) {
-                            return Some(x * y * complement)
+                            return Some(x * y * complement);
                         }
                     }
                 }
             }
         }
     }
-    
+
     None
 }
 
@@ -57,37 +52,23 @@ mod tests {
 
     use maplit::hashset;
 
-    static SAMPLE: &str = r#"
-1721
-979
-366
-299
-675
-1456
-"#;
+    static SAMPLE: &str = "1721\n979\n366\n299\n675\n1456";
 
     #[test]
     fn test_parse() {
-        assert_eq!(parse(SAMPLE), hashset!(
-            1721,
-            979,
-            366,
-            299,
-            675,
-            1456
-        ));
+        assert_eq!(parse(SAMPLE), Ok(hashset!(1721, 979, 366, 299, 675, 1456)));
     }
 
     #[test]
     fn test_part_1() {
-        let answer = part_1(&parse(SAMPLE));
-        assert_eq!(answer, Some(514579));
+        let parsed = parse(SAMPLE).unwrap();
+        assert_eq!(part_1(&parsed), Some(514579));
     }
 
     #[test]
     fn test_part_2() {
-        let answer = part_2(&parse(SAMPLE));
-        assert_eq!(answer, Some(241861950));
+        let parsed = parse(SAMPLE).unwrap();
+        assert_eq!(part_2(&parsed), Some(241861950));
     }
 
     #[test]
