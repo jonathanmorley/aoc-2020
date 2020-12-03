@@ -1,2 +1,8 @@
-# aoc-2020
-Advent of Code 2020
+# advent-of-code
+
+> Advent of Code
+
+## Usage
+
+- `cargo run --release` to run all days
+- `cargo test` to run all tests
