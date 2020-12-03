@@ -29,7 +29,7 @@ impl PasswordValidator {
 
     // This is 1-indexed
     fn has_char_at_index(&self, idx: usize) -> bool {
-        self.password.char_indices().nth(idx - 1).map(|x| x.1) == Some(self.character)
+        self.password.chars().nth(idx - 1) == Some(self.character)
     }
 
     fn valid_by_index(&self) -> bool {

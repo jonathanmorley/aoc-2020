@@ -1,15 +1,16 @@
 use std::str::FromStr;
-use std::{collections::HashSet, num::ParseIntError};
+use std::num::ParseIntError;
 
 use aoc_runner_derive::{aoc, aoc_generator};
+use fnv::FnvHashSet;
 
 #[aoc_generator(day1)]
-pub fn parse(input: &str) -> Result<HashSet<u32>, ParseIntError> {
+pub fn parse(input: &str) -> Result<FnvHashSet<u32>, ParseIntError> {
     input.lines().map(FromStr::from_str).collect()
 }
 
 #[aoc(day1, part1)]
-pub fn part_1(input: &HashSet<u32>) -> Option<u32> {
+pub fn part_1(input: &FnvHashSet<u32>) -> Option<u32> {
     for &x in input {
         if x < 2020 / 2 {
             if let Some(complement) = complement(x) {
@@ -24,7 +25,7 @@ pub fn part_1(input: &HashSet<u32>) -> Option<u32> {
 }
 
 #[aoc(day1, part2)]
-pub fn part_2(input: &HashSet<u32>) -> Option<u32> {
+pub fn part_2(input: &FnvHashSet<u32>) -> Option<u32> {
     for &x in input {
         if x < 2020 / 3 {
             for &y in input {
@@ -50,13 +51,12 @@ fn complement(x: u32) -> Option<u32> {
 mod tests {
     use super::*;
 
-    use maplit::hashset;
-
     static SAMPLE: &str = "1721\n979\n366\n299\n675\n1456";
 
     #[test]
     fn test_parse() {
-        assert_eq!(parse(SAMPLE), Ok(hashset!(1721, 979, 366, 299, 675, 1456)));
+        let set = vec![1721u32, 979u32, 366u32, 299u32, 675u32, 1456u32].into_iter().collect();
+        assert_eq!(parse(SAMPLE), Ok(set));
     }
 
     #[test]
