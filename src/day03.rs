@@ -1,17 +1,12 @@
 use aoc_runner_derive::aoc;
 
-/*#[aoc_generator(day3)]
-pub fn parse(input: &str) -> Vec<&str> {
-    
-}*/
-
 fn count_trees<'a>(lines: impl Iterator<Item=&'a str>, right: usize, down: usize) -> usize {
     lines
         .step_by(down)
         .enumerate()
         .map(|(index, line)| ((index*right) % line.len(), line))
-        .map(|(index, line)| line.chars().nth(index))
-        .filter(|&square| square == Some('#'))
+        .map(|(index, line)| char::from(line.as_bytes()[index]))
+        .filter(|&square| square == '#')
         .count()
 }
 
@@ -23,7 +18,7 @@ pub fn part_1(input: &str) -> usize {
 #[aoc(day3, part2)]
 pub fn part_2(input: &str) -> usize {
     [
-        count_trees(input.clone().lines(), 1, 1),
+        count_trees(input.lines(), 1, 1),
         count_trees(input.lines(), 3, 1),
         count_trees(input.lines(), 5, 1),
         count_trees(input.lines(), 7, 1),
