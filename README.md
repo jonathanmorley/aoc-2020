@@ -4,5 +4,5 @@
 
 ## Usage
 
-- `cargo run --release` to run all days
+- `cargo run --release --bin aoc-<year>` to run all days in the year
 - `cargo test` to run all tests
