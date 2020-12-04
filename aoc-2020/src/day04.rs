@@ -114,10 +114,10 @@ impl TryFrom<Credentials> for ValidatedCredentials {
 
     fn try_from(value: Credentials) -> Result<Self, Self::Error> {
         lazy_static! {
-            static ref YEAR: Regex = Regex::new(r"\d{4}").unwrap();
-            static ref HAIR_COLOR: Regex = Regex::new(r"#[0-9a-f]{6}").unwrap();
-            static ref EYE_COLOR: Regex = Regex::new(r"amb|blu|brn|gry|grn|hzl|oth").unwrap();
-            static ref PASSPORT_ID: Regex = Regex::new(r"\d{9}").unwrap();
+            static ref YEAR: Regex = Regex::new(r"^\d{4}$").unwrap();
+            static ref HAIR_COLOR: Regex = Regex::new(r"^#[0-9a-f]{6}$").unwrap();
+            static ref EYE_COLOR: Regex = Regex::new(r"^(amb|blu|brn|gry|grn|hzl|oth)$").unwrap();
+            static ref PASSPORT_ID: Regex = Regex::new(r"^\d{9}$").unwrap();
         }
 
         if !YEAR.is_match(&value.birth_year) {
