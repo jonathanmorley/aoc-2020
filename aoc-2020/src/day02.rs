@@ -37,7 +37,7 @@ impl PasswordValidator {
     }
 }
 
-pub fn parse(input: &str) -> impl Iterator<Item=PasswordValidator> + '_ {
+pub fn parse(input: &str) -> impl Iterator<Item = PasswordValidator> + '_ {
     input.lines().map(FromStr::from_str).map(|x| x.unwrap())
 }
 

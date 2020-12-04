@@ -1,5 +1,5 @@
-use std::str::FromStr;
 use std::num::ParseIntError;
+use std::str::FromStr;
 
 use aoc_runner_derive::{aoc, aoc_generator};
 use fnv::FnvHashSet;
@@ -55,7 +55,9 @@ mod tests {
 
     #[test]
     fn test_parse() {
-        let set = vec![1721u32, 979u32, 366u32, 299u32, 675u32, 1456u32].into_iter().collect();
+        let set = vec![1721u32, 979u32, 366u32, 299u32, 675u32, 1456u32]
+            .into_iter()
+            .collect();
         assert_eq!(parse(SAMPLE), Ok(set));
     }
 

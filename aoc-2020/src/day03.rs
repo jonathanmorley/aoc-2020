@@ -1,10 +1,10 @@
 use aoc_runner_derive::aoc;
 
-fn count_trees<'a>(lines: impl Iterator<Item=&'a str>, right: usize, down: usize) -> usize {
+fn count_trees<'a>(lines: impl Iterator<Item = &'a str>, right: usize, down: usize) -> usize {
     lines
         .step_by(down)
         .enumerate()
-        .map(|(index, line)| ((index*right) % line.len(), line))
+        .map(|(index, line)| ((index * right) % line.len(), line))
         .map(|(index, line)| char::from(line.as_bytes()[index]))
         .filter(|&square| square == '#')
         .count()
@@ -22,16 +22,17 @@ pub fn part_2(input: &str) -> usize {
         count_trees(input.lines(), 3, 1),
         count_trees(input.lines(), 5, 1),
         count_trees(input.lines(), 7, 1),
-        count_trees(input.lines(), 1, 2)
-    ].iter().product()
+        count_trees(input.lines(), 1, 2),
+    ]
+    .iter()
+    .product()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    static SAMPLE: &str = 
-"..##.......
+    static SAMPLE: &str = "..##.......
 #...#...#..
 .#....#..#.
 ..#.#...#.#

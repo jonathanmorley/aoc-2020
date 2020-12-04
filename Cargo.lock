@@ -19,8 +19,10 @@ checksum = "bf8dcb5b4bbaa28653b647d8c77bd4ed40183b48882e130c1f1ffb73de069fd7"
 name = "aoc-2019"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "aoc-runner",
  "aoc-runner-derive",
+ "itertools",
 ]
 
 [[package]]
@@ -32,7 +34,9 @@ dependencies = [
  "aoc-runner-derive",
  "fnv",
  "itertools",
+ "lazy_static",
  "recap",
+ "regex",
  "serde",
 ]
 
