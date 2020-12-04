@@ -2,7 +2,7 @@ use aoc_runner_derive::aoc;
 
 use anyhow::{anyhow, bail, Result};
 use itertools::Itertools;
-use std::{convert::{TryFrom, TryInto}, fmt};
+use std::{convert::TryInto, fmt};
 use std::str::FromStr;
 
 /*#[derive(Debug, Hash, PartialEq)]
@@ -196,122 +196,13 @@ impl FromStr for Operations {
     }
 }
 
-/*impl TryFrom<Operation> for Effect {
-    type Error = anyhow::Error;
-
-    fn try_from(value: Operation) -> Result<Self, Self::Error> {
-        if value.operator == 99 {
-            return Ok(Self::Halt);
-        }
-
-        let left = value.left.ok_or_else(|| anyhow!("Left value not found in {}", value))?;
-        let right = value.right.ok_or_else(|| anyhow!("Right value not found in {}", value))?;
-        let target = value.target.ok_or_else(|| anyhow!("Target value not found in {}", value))?;
-
-        match value.operator {
-            1 => Ok(Self::Update {  index: target, value: left + right }),
-            2 =>  Ok(Self::Update {  index: target, value: left * right }),
-            _ => bail!("Unexpected Operator ({})", value)
-        }
-    }
-}*/
-
-#[derive(Debug)]
-struct Stack {
-    memory: Vec<usize>,
-    instruction_pointer: usize
-}
-
-impl FromStr for Stack {
-    type Err = anyhow::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Stack {
-            memory: s.split(',').map(FromStr::from_str).collect::<Result<_, _>>()?,
-            instruction_pointer: 0
-        })
-    }
-}
-
-impl fmt::Display for Stack {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.memory.iter().join(","))
-    }
-}
-
-impl Stack {
-    fn read(&self, index: usize) -> Result<&usize> {
-        self.memory.get(index).ok_or_else(|| anyhow!("Index {} does not exist", index))
-    }
-
-    fn instruction(&self) -> Result<Instruction> {
-        match self.memory[self.instruction_pointer] {
-            1 => Ok(Instruction::Add {
-                left_index: *self.read(self.instruction_pointer+1)?,
-                right_index: *self.read(self.instruction_pointer+2)?,
-                target_index: *self.read(self.instruction_pointer+3)?
-            }),
-            2 => Ok(Instruction::Multiply {
-                left_index: *self.read(self.instruction_pointer+1)?,
-                right_index: *self.read(self.instruction_pointer+2)?,
-                target_index: *self.read(self.instruction_pointer+3)?
-            }),
-            99 => Ok(Instruction::Halt),
-            a => bail!("Invalid opcode {}", a)
-        }
-    }
-
-    fn apply(&mut self) -> Result<Option<()>> {
-        match self.instruction()? {
-            Instruction::Add { left_index, right_index, target_index } => {
-                self.memory[target_index] = self.read(left_index)? + self.read(right_index)?;
-                self.instruction_pointer += 4;
-
-                Ok(Some(()))
-            }
-            Instruction::Multiply { left_index, right_index, target_index } => {
-                self.memory[target_index] = self.read(left_index)? * self.read(right_index)?;
-                self.instruction_pointer += 4;
-
-                Ok(Some(()))
-            },
-            Instruction::Halt => Ok(None)
-        }
-    }
-
-    fn run(&mut self) -> Result<&Stack> {
-        loop {
-            if let None = self.apply()? {
-                return Ok(self)
-            }
-        }
-    }
-}
-
-#[derive(Debug)]
-enum Instruction {
-    Add {
-        left_index: usize,
-        right_index: usize,
-        target_index: usize
-    },
-    Multiply {
-        left_index: usize,
-        right_index: usize,
-        target_index: usize
-    },
-    Halt
-}
-
-#[aoc(day2, part1)]
 pub fn part_1(input: &str) -> Result<usize> {
-    let mut stack: Stack = input.parse()?;
+    let mut operations: Operations = input.parse()?;
 
-    stack.memory[1] = 12;
-    stack.memory[2] = 2;
-
-    stack.run()?;
-    stack.read(0).map(|x| *x)
+    operations.update(1, 12)?;
+    operations.update(2, 2)?;
+    operations.run()?;
+    operations.get(0).ok_or_else(|| anyhow!("No value found"))
 }
 
 #[cfg(test)]
@@ -336,23 +227,12 @@ mod tests {
     }
 
     #[test]
-    fn test_operations_run() -> Result<()> {
+    fn test_run() -> Result<()> {
         assert_eq!(SAMPLE_1.parse::<Operations>()?.run()?.to_string(), "3500,9,10,70,2,3,11,0,99,30,40,50");
         assert_eq!(SAMPLE_2.parse::<Operations>()?.run()?.to_string(), "2,0,0,0,99");
         assert_eq!(SAMPLE_3.parse::<Operations>()?.run()?.to_string(), "2,3,0,6,99");
         assert_eq!(SAMPLE_4.parse::<Operations>()?.run()?.to_string(), "2,4,4,5,99,9801");
         assert_eq!(SAMPLE_5.parse::<Operations>()?.run()?.to_string(), "30,1,1,4,2,5,6,0,99");
-
-        Ok(())
-    }
-
-    #[test]
-    fn test_stacks_run() -> Result<()> {
-        assert_eq!(SAMPLE_1.parse::<Stack>()?.run()?.to_string(), "3500,9,10,70,2,3,11,0,99,30,40,50");
-        assert_eq!(SAMPLE_2.parse::<Stack>()?.run()?.to_string(), "2,0,0,0,99");
-        assert_eq!(SAMPLE_3.parse::<Stack>()?.run()?.to_string(), "2,3,0,6,99");
-        assert_eq!(SAMPLE_4.parse::<Stack>()?.run()?.to_string(), "2,4,4,5,99,9801");
-        assert_eq!(SAMPLE_5.parse::<Stack>()?.run()?.to_string(), "30,1,1,4,2,5,6,0,99");
 
         Ok(())
     }
