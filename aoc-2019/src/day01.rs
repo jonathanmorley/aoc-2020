@@ -1,7 +1,7 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 
-use std::str::FromStr;
 use std::num::ParseIntError;
+use std::str::FromStr;
 
 #[aoc_generator(day1)]
 pub fn parse(input: &str) -> Result<Vec<u32>, ParseIntError> {
@@ -19,7 +19,7 @@ pub fn part_2(input: &[u32]) -> u32 {
 }
 
 fn marginal_fuel_required(weight: &u32) -> u32 {
-    (weight/3).checked_sub(2).unwrap_or_default()
+    (weight / 3).checked_sub(2).unwrap_or_default()
 }
 
 fn fuel_required(weight: &u32) -> u32 {
@@ -29,7 +29,7 @@ fn fuel_required(weight: &u32) -> u32 {
 fn total_weight(weight: &u32) -> u32 {
     match marginal_fuel_required(weight) {
         0 => *weight,
-        x => weight + total_weight(&x)
+        x => weight + total_weight(&x),
     }
 }
 
@@ -43,7 +43,7 @@ mod tests {
     fn test_parse() {
         assert_eq!(parse(SAMPLE), Ok(vec![12, 14, 1969, 100756]));
     }
-    
+
     #[test]
     fn test_marginal_fuel_required() {
         assert_eq!(marginal_fuel_required(&12), 2);

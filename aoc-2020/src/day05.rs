@@ -1,7 +1,7 @@
 use anyhow::Result;
-use std::{str::FromStr, num::TryFromIntError};
-use std::convert::TryFrom;
 use itertools::Itertools;
+use std::convert::TryFrom;
+use std::{num::TryFromIntError, str::FromStr};
 
 use aoc_runner_derive::{aoc, aoc_generator};
 
@@ -16,7 +16,7 @@ impl FromStr for Seat {
             .chars()
             .map(|x| match x {
                 'B' | 'R' => 1,
-                _ => 0
+                _ => 0,
             })
             .join("");
 
@@ -52,7 +52,7 @@ fn minimum(input: &[Seat]) -> Option<u16> {
 pub fn part_2(input: &[Seat]) -> Option<u16> {
     if let Some(max) = part_1(input) {
         if let Some(min) = minimum(input) {
-            for i in (min+1)..max {
+            for i in (min + 1)..max {
                 if let None = input.iter().find(|&s| s.0 == i) {
                     return Some(i);
                 }
@@ -79,11 +79,7 @@ mod tests {
 
     #[test]
     fn test_parse() -> Result<()> {
-        assert_eq!(parse(SAMPLE)?, vec![
-            Seat(567),
-            Seat(119),
-            Seat(820)
-        ]);
+        assert_eq!(parse(SAMPLE)?, vec![Seat(567), Seat(119), Seat(820)]);
         Ok(())
     }
 

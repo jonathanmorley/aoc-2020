@@ -1,7 +1,7 @@
 use aoc_runner_derive::aoc;
 
-use anyhow::{Result, bail};
 use crate::intcode::Stack;
+use anyhow::{bail, Result};
 
 #[aoc(day2, part1)]
 pub fn part_1(input: &str) -> Result<usize> {
@@ -22,7 +22,7 @@ pub fn part_2(input: &str) -> Result<usize> {
             stack.run()?;
 
             if stack.output()? == 19690720 {
-                return Ok(100 * noun + verb)
+                return Ok(100 * noun + verb);
             }
         }
     }

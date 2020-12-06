@@ -1,7 +1,7 @@
 use anyhow::{anyhow, bail, Result};
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::{str::FromStr, convert::TryFrom};
+use std::{convert::TryFrom, str::FromStr};
 
 use aoc_runner_derive::aoc;
 
@@ -15,7 +15,7 @@ pub struct Credentials {
     eye_color: String,
     passport_id: String,
     country_id: Option<String>,
-    raw: String
+    raw: String,
 }
 
 impl FromStr for Credentials {
@@ -69,7 +69,7 @@ impl FromStr for Credentials {
             eye_color,
             passport_id,
             country_id,
-            raw: s.into()
+            raw: s.into(),
         })
     }
 }
@@ -77,7 +77,7 @@ impl FromStr for Credentials {
 #[derive(Debug, Hash, PartialEq)]
 enum Height {
     Centimetres(u32),
-    Inches(u32)
+    Inches(u32),
 }
 
 impl FromStr for Height {
@@ -85,11 +85,11 @@ impl FromStr for Height {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.ends_with("cm") {
-            return Ok(Self::Centimetres(s[..s.len() - 2].parse()?))
+            return Ok(Self::Centimetres(s[..s.len() - 2].parse()?));
         }
 
         if s.ends_with("in") {
-            return Ok(Self::Inches(s[..s.len() - 2].parse()?))
+            return Ok(Self::Inches(s[..s.len() - 2].parse()?));
         }
 
         bail!("Invalid height ({})", s)
@@ -106,7 +106,7 @@ struct ValidatedCredentials {
     eye_color: String,
     passport_id: String,
     country_id: Option<String>,
-    raw: String
+    raw: String,
 }
 
 impl TryFrom<Credentials> for ValidatedCredentials {
@@ -153,12 +153,12 @@ impl TryFrom<Credentials> for ValidatedCredentials {
                 if !(150..=193).contains(&h) {
                     bail!("Invalid height ({}cm)", h);
                 }
-            },
+            }
             Height::Inches(h) => {
                 if !(59..=76).contains(&h) {
                     bail!("Invalid height ({}in)", h);
                 }
-            },
+            }
         }
 
         if !HAIR_COLOR.is_match(&value.hair_color) {
@@ -182,12 +182,12 @@ impl TryFrom<Credentials> for ValidatedCredentials {
             eye_color: value.eye_color,
             passport_id: value.passport_id,
             country_id: value.country_id,
-            raw: value.raw
+            raw: value.raw,
         })
     }
 }
 
-pub fn parse(input: &str) -> impl Iterator<Item=Credentials> + '_ {
+pub fn parse(input: &str) -> impl Iterator<Item = Credentials> + '_ {
     input
         .split("\n\n")
         .map(|s| s.parse())
@@ -226,8 +226,7 @@ hgt:179cm
 hcl:#cfa07d eyr:2025 pid:166559648
 iyr:2011 ecl:brn hgt:59in";
 
-    static SAMPLE_2: &str = 
-"eyr:1972 cid:100
+    static SAMPLE_2: &str = "eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
 
 iyr:2019
