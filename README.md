@@ -1,6 +1,23 @@
-# advent-of-code
+# Advent of Code
 
-> Advent of Code
+## Setup
+
+```
+cargo install cargo-aoc
+cargo install
+```
+
+## Fetch input
+
+`cargo aoc input`
+
+## Testing
+
+`cargo test`
+
+## Running
+
+`cargo aoc`
 
 ## Usage
 
