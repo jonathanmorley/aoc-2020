@@ -11,59 +11,56 @@ use nom::IResult;
 use nom::multi::many_m_n;
 use nom_bitvec::BSlice;
 
-#[derive(Debug, PartialEq, Eq)]
-pub enum Packet {
-    Sum { version: u8, packets: Vec<Packet> },
-    Product { version: u8, packets: Vec<Packet> },
-    Minimum { version: u8, packets: Vec<Packet> },
-    Maximum { version: u8, packets: Vec<Packet> },
-    Literal { version: u8, value: u64 },
-    GreaterThan { version: u8, packets: Vec<Packet> },
-    LessThan { version: u8, packets: Vec<Packet> },
-    EqualTo { version: u8, packets: Vec<Packet> },
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Packet {
+    version: u8,
+    content: PacketContent
 }
 
-impl Packet {
-    fn version(&self) -> u8 {
-        match self {
-            Packet::Sum { version, .. }
-            | Packet::Product { version, .. }
-            | Packet::Minimum { version, .. }
-            | Packet::Maximum { version, .. }
-            | Packet::Literal { version, .. }
-            | Packet::GreaterThan { version, .. }
-            | Packet::LessThan { version, .. }
-            | Packet::EqualTo { version, .. } => *version,
-        }
-    }
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum PacketContent {
+    Sum(Vec<Packet>),
+    Product(Vec<Packet>),
+    Minimum(Vec<Packet>),
+    Maximum(Vec<Packet>),
+    Literal(u64),
+    GreaterThan(Vec<Packet>),
+    LessThan(Vec<Packet>),
+    EqualTo(Vec<Packet>),
+}
 
-    fn all_packets(&self) -> Vec<&Packet> {
-        iter::once(self)
-            .chain(match self {
-                Packet::Literal { .. } => vec![],
-                Packet::Sum { packets, .. }
-                | Packet::Product { packets, .. }
-                | Packet::Minimum { packets, .. }
-                | Packet::Maximum { packets, .. }
-                | Packet::GreaterThan { packets, .. }
-                | Packet::LessThan { packets, .. }
-                | Packet::EqualTo { packets, .. } => {
-                    packets.iter().flat_map(Packet::all_packets).collect()
+impl IntoIterator for Packet {
+    type Item = Packet;
+    type IntoIter = iter::Chain<iter::Once<Self::Item>, std::vec::IntoIter<Self::Item>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        iter::once(self.clone())
+            .chain(match self.content {
+                PacketContent::Literal(_) => vec![],
+                PacketContent::Sum(packets)
+                | PacketContent::Product(packets)
+                | PacketContent::Minimum(packets)
+                | PacketContent::Maximum(packets)
+                | PacketContent::GreaterThan(packets)
+                | PacketContent::LessThan(packets)
+                | PacketContent::EqualTo(packets) => {
+                    packets.into_iter().flat_map(Packet::into_iter).collect()
                 }
             })
-            .collect()
     }
+}
 
-    fn result(&self) -> u64 {
-        match self {
-            Packet::Sum { packets, .. } => packets.iter().map(Packet::result).sum(),
-            Packet::Product { packets, .. } => packets.iter().map(Packet::result).product(),
-            Packet::Minimum { packets, .. } => packets.iter().map(Packet::result).min().unwrap(),
-            Packet::Maximum { packets, .. } => packets.iter().map(Packet::result).max().unwrap(),
-            Packet::Literal { value, .. } => *value,
-            Packet::GreaterThan { packets, .. } => if packets[0].result().gt(&packets[1].result()) { 1 } else { 0 },
-            Packet::LessThan { packets, .. } => if packets[0].result().lt(&packets[1].result()) { 1 } else { 0 },
-            Packet::EqualTo { packets, .. } => if packets[0].result().eq(&packets[1].result()) { 1 } else { 0 },
+impl From<Packet> for u64 {
+    fn from(p: Packet) -> Self {
+        match p.content {
+            PacketContent::Sum(packets) => packets.into_iter().map(u64::from).sum(),
+            PacketContent::Product(packets) => packets.into_iter().map(u64::from).product(),
+            PacketContent::Minimum(packets) => packets.into_iter().map(u64::from).min().unwrap(),
+            PacketContent::Maximum(packets) => packets.into_iter().map(u64::from).max().unwrap(),
+            PacketContent::Literal(value) => value,
+            PacketContent::GreaterThan(packets) => if u64::from(packets[0].clone()).gt(&u64::from(packets[1].clone())) { 1 } else { 0 },
+            PacketContent::LessThan(packets) => if u64::from(packets[0].clone()).lt(&u64::from(packets[1].clone())) { 1 } else { 0 },
+            PacketContent::EqualTo(packets) => if u64::from(packets[0].clone()).eq(&u64::from(packets[1].clone())) { 1 } else { 0 },
         }
     }
 }
@@ -112,20 +109,26 @@ fn parse_packet(input: BSlice<Msb0, u8>) -> IResult<BSlice<Msb0, u8>, Packet> {
     let (input, header) = parse_header(input)?;
 
     match header {
-        (version, 4) => map(parse_literal, |value| Packet::Literal { version, value })(input),
+        (version, 4) => {
+            let (input, content) = parse_literal(input)?;
+            Ok((input, Packet { version, content: PacketContent::Literal(content) }))
+        },
         (version, type_id) => {
             let (input, length) = parse_length(input)?;
             let (input, packets) = parse_packets(input, length)?;
 
-            Ok((input, match type_id {
-                0 => Packet::Sum { version, packets },
-                1 => Packet::Product { version, packets },
-                2 => Packet::Minimum { version, packets },
-                3 => Packet::Maximum { version, packets },
-                5 => Packet::GreaterThan { version, packets },
-                6 => Packet::LessThan { version, packets },
-                7 => Packet::EqualTo { version, packets },
-                _ => unreachable!()
+            Ok((input, Packet {
+                version,
+                content: match type_id {
+                    0 => PacketContent::Sum(packets),
+                    1 => PacketContent::Product(packets),
+                    2 => PacketContent::Minimum(packets),
+                    3 => PacketContent::Maximum(packets),
+                    5 => PacketContent::GreaterThan(packets),
+                    6 => PacketContent::LessThan(packets),
+                    7 => PacketContent::EqualTo(packets),
+                    _ => unreachable!()
+                }
             }))
         }
     }
@@ -150,14 +153,13 @@ pub fn parse(input: &str) -> Packet {
 
 pub fn part1(input: &str) -> u64 {
     parse(input)
-        .all_packets()
         .into_iter()
-        .map(|packet| packet.version() as u64)
+        .map(|packet| packet.version as u64)
         .sum()
 }
 
 pub fn part2(input: &str) -> u64 {
-    parse(input).result()
+    parse(input).into()
 }
 
 #[cfg(test)]
@@ -168,59 +170,59 @@ mod tests {
     fn parse() {
         assert_eq!(
             super::parse("D2FE28"),
-            Packet::Literal {
+            Packet {
                 version: 6,
-                value: 2021
+                content: PacketContent::Literal(2021)
             }
         );
         assert_eq!(
             super::parse("38006F45291200"),
-            Packet::LessThan {
+            Packet {
                 version: 1,
-                packets: vec![
-                    Packet::Literal {
+                content: PacketContent::LessThan(vec![
+                    Packet {
                         version: 6,
-                        value: 10
+                        content: PacketContent::Literal(10)
                     },
-                    Packet::Literal {
+                    Packet {
                         version: 2,
-                        value: 20
-                    }
-                ]
+                        content: PacketContent::Literal(20)
+                    },
+                ])
             }
         );
         assert_eq!(
             super::parse("9C0141080250320F1802104A08"),
-            Packet::EqualTo {
+            Packet {
                 version: 4,
-                packets: vec![
-                    Packet::Sum {
+                content: PacketContent::EqualTo(vec![
+                    Packet {
                         version: 2,
-                        packets: vec![
-                            Packet::Literal {
+                        content: PacketContent::Sum(vec![
+                            Packet {
                                 version: 2,
-                                value: 1
+                                content: PacketContent::Literal(1)
                             },
-                            Packet::Literal {
+                            Packet {
                                 version: 4,
-                                value: 3
-                            }
-                        ]
-                    },
-                    Packet::Product {
-                        version: 6,
-                        packets: vec![
-                            Packet::Literal {
-                                version: 0,
-                                value: 2,
+                                content: PacketContent::Literal(3)
                             },
-                            Packet::Literal {
+                        ])
+                    },
+                    Packet {
+                        version: 6,
+                        content: PacketContent::Product(vec![
+                            Packet {
+                                version: 0,
+                                content: PacketContent::Literal(2)
+                            },
+                            Packet {
                                 version: 2,
-                                value: 2
-                            }
-                        ]
+                                content: PacketContent::Literal(2)
+                            },
+                        ])
                     }
-                ]
+                ])
             }
         );
     }
