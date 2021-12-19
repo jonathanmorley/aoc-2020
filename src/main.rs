@@ -45,11 +45,7 @@ macro_rules! solve {
 }
 
 fn main() {
-  let args = Args::parse();
-
-  //dbg!(args);
-
-  match args {
+  match Args::parse() {
     Args::Solve { year: 2021, day: 01 } => solve!(2021, 01, aoc_2021_day01),
     Args::Solve { year: 2021, day: 02 } => solve!(2021, 02, aoc_2021_day02),
     Args::Solve { year: 2021, day: 03 } => solve!(2021, 03, aoc_2021_day03),
@@ -66,6 +62,15 @@ fn main() {
     Args::Solve { year: 2021, day: 14 } => solve!(2021, 14, aoc_2021_day14),
     Args::Solve { year: 2021, day: 15 } => solve!(2021, 15, aoc_2021_day15),
     Args::Solve { year: 2021, day: 16 } => solve!(2021, 16, aoc_2021_day16),
+    Args::Solve { year: 2021, day: 17 } => solve!(2021, 17, aoc_2021_day17),
+    // Args::Solve { year: 2021, day: 18 } => solve!(2021, 18, aoc_2021_day18),
+    // Args::Solve { year: 2021, day: 19 } => solve!(2021, 19, aoc_2021_day19),
+    // Args::Solve { year: 2021, day: 20 } => solve!(2021, 20, aoc_2021_day20),
+    // Args::Solve { year: 2021, day: 21 } => solve!(2021, 21, aoc_2021_day21),
+    // Args::Solve { year: 2021, day: 22 } => solve!(2021, 22, aoc_2021_day22),
+    // Args::Solve { year: 2021, day: 23 } => solve!(2021, 23, aoc_2021_day23),
+    // Args::Solve { year: 2021, day: 24 } => solve!(2021, 24, aoc_2021_day24),
+    // Args::Solve { year: 2021, day: 25 } => solve!(2021, 25, aoc_2021_day25),
     _ => unreachable!()
   }
 }

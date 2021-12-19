@@ -130,8 +130,6 @@ pub fn part2(input: &str) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     const SAMPLE: &str = "2199943210
 3987894921
 9856789892

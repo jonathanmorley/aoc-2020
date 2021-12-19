@@ -23,6 +23,7 @@ aoc-2021-day13 = { version = "0.1.0", path = "aoc-2021/day13" }
 aoc-2021-day14 = { version = "0.1.0", path = "aoc-2021/day14" }
 aoc-2021-day15 = { version = "0.1.0", path = "aoc-2021/day15" }
 aoc-2021-day16 = { version = "0.1.0", path = "aoc-2021/day16" }
+aoc-2021-day17 = { version = "0.1.0", path = "aoc-2021/day17" }
 clap = { version = "3.0.0-rc.7", features = ["derive"] }
 
 [workspace]
