@@ -199,7 +199,9 @@ fn generator(input: &str) -> Vec<DisplayReading> {
         .collect()
 }
 
-fn part1(input: &[DisplayReading]) -> usize {
+pub fn part1(input: &str) -> usize {
+    let input = generator(input);
+
     input
         .iter()
         .map(|line| {
@@ -211,7 +213,9 @@ fn part1(input: &[DisplayReading]) -> usize {
         .sum()
 }
 
-fn part2(input: &[DisplayReading]) -> u32 {
+pub fn part2(input: &str) -> u32 {
+    let input = generator(input);
+
     let mut readings = input.to_owned();
 
     for reading in readings.iter_mut() {
@@ -241,17 +245,13 @@ egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce";
 
     #[test]
-    fn sample2_part1() {
-        assert_eq!(part1(&generator(SAMPLE_2)), 26);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE_2), 26);
     }
 
     #[test]
-    fn sample1_part2() {
-        assert_eq!(part2(&generator(SAMPLE_1)), 5353);
-    }
-
-    #[test]
-    fn sample2_part2() {
-        assert_eq!(part2(&generator(SAMPLE_2)), 61229);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE_1), 5353);
+        assert_eq!(super::part2(SAMPLE_2), 61229);
     }
 }

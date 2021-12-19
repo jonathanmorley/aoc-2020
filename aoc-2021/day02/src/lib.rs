@@ -37,7 +37,9 @@ struct Location {
     depth: i64,
 }
 
-fn part1(input: &[Vector]) -> i64 {
+pub fn part1(input: &str) -> i64 {
+    let input = &generator(input).unwrap();
+
     let mut location = Location {
         horizontal: 0,
         depth: 0,
@@ -60,7 +62,9 @@ struct OrientedLocation {
     aim: i64,
 }
 
-fn part2(input: &[Vector]) -> i64 {
+pub fn part2(input: &str) -> i64 {
+    let input = &generator(input).unwrap();
+
     let mut location = OrientedLocation {
         horizontal: 0,
         depth: 0,
@@ -83,8 +87,6 @@ fn part2(input: &[Vector]) -> i64 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     const SAMPLE: &str = "forward 5
 down 5
 forward 8
@@ -93,12 +95,12 @@ down 8
 forward 2";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE).unwrap()), 150);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 150);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE).unwrap()), 900);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 900);
     }
 }

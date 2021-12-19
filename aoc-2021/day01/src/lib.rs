@@ -3,11 +3,13 @@ use std::num::ParseIntError;
 
 use itertools::izip;
 
-pub fn generator(input: &str) -> Result<Vec<u32>, ParseIntError> {
+fn generator(input: &str) -> Result<Vec<u32>, ParseIntError> {
     input.lines().map(str::parse).collect()
 }
 
-pub fn part1(input: &[u32]) -> usize {
+pub fn part1(input: &str) -> usize {
+    let input = generator(input).unwrap();
+
     let offset = iter::once(None).chain(input.clone().into_iter().map(Some));
 
     // Creates an iterator of (Option<u8>, u8),
@@ -20,7 +22,9 @@ pub fn part1(input: &[u32]) -> usize {
     increases.count()
 }
 
-pub fn part2(input: &[u32]) -> usize {
+pub fn part2(input: &str) -> usize {
+    let input = generator(input).unwrap();
+
     let offset_1 = iter::once(None).chain(input.clone().into_iter().map(Some));
     let offset_2 = iter::once(None)
         .chain(iter::once(None))
@@ -63,12 +67,12 @@ mod tests {
 263";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE).unwrap()), 7);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 7);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE).unwrap()), 5);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 5);
     }
 }

@@ -1,2 +1,29 @@
+[package]
+name = "advent-of-code"
+version = "0.1.0"
+authors = ["Morley, Jonathan <jmorley@cvent.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+aoc-2021-day01 = { version = "0.1.0", path = "aoc-2021/day01" }
+aoc-2021-day02 = { version = "0.1.0", path = "aoc-2021/day02" }
+aoc-2021-day03 = { version = "0.1.0", path = "aoc-2021/day03" }
+aoc-2021-day04 = { version = "0.1.0", path = "aoc-2021/day04" }
+aoc-2021-day05 = { version = "0.1.0", path = "aoc-2021/day05" }
+aoc-2021-day06 = { version = "0.1.0", path = "aoc-2021/day06" }
+aoc-2021-day07 = { version = "0.1.0", path = "aoc-2021/day07" }
+aoc-2021-day08 = { version = "0.1.0", path = "aoc-2021/day08" }
+aoc-2021-day09 = { version = "0.1.0", path = "aoc-2021/day09" }
+aoc-2021-day10 = { version = "0.1.0", path = "aoc-2021/day10" }
+aoc-2021-day11 = { version = "0.1.0", path = "aoc-2021/day11" }
+aoc-2021-day12 = { version = "0.1.0", path = "aoc-2021/day12" }
+aoc-2021-day13 = { version = "0.1.0", path = "aoc-2021/day13" }
+aoc-2021-day14 = { version = "0.1.0", path = "aoc-2021/day14" }
+aoc-2021-day15 = { version = "0.1.0", path = "aoc-2021/day15" }
+aoc-2021-day16 = { version = "0.1.0", path = "aoc-2021/day16" }
+clap = { version = "3.0.0-rc.7", features = ["derive"] }
+
 [workspace]
 members = ["aoc-2021/*"]

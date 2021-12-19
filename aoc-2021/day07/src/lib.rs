@@ -8,7 +8,9 @@ fn generator(input: &str) -> Result<Vec<u32>> {
         .map_err(Into::into)
 }
 
-fn part1(input: &[u32]) -> u32 {
+pub fn part1(input: &str) -> u32 {
+    let input = generator(input).unwrap();
+
     let (min, max) = (*input.iter().min().unwrap(), *input.iter().max().unwrap());
 
     (min..=max)
@@ -22,7 +24,9 @@ fn part1(input: &[u32]) -> u32 {
         .unwrap()
 }
 
-fn part2(input: &[u32]) -> u32 {
+pub fn part2(input: &str) -> u32 {
+    let input = generator(input).unwrap();
+
     let (min, max) = (*input.iter().min().unwrap(), *input.iter().max().unwrap());
 
     (min..=max)
@@ -44,12 +48,12 @@ mod tests {
     const SAMPLE: &str = "16,1,2,0,4,2,7,1,2,14";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE).unwrap()), 37);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 37);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE).unwrap()), 168);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 168);
     }
 }

@@ -1,6 +1,5 @@
 use std::cmp::Ordering;
 
-use anyhow::Result;
 use itertools::Itertools;
 use nom::{
     bytes::complete::tag,
@@ -30,10 +29,6 @@ fn coordinate(input: &str) -> IResult<&str, Coordinate> {
         map_res(digit1, str::parse),
     )(input)?;
     Ok((input, Coordinate { x, y }))
-}
-
-struct Seafloor {
-    vents: Vec<Coordinate>,
 }
 
 struct VentLine(Coordinate, Coordinate);
@@ -107,9 +102,10 @@ fn generator(input: &str) -> Vec<VentLine> {
     input.lines().map(|l| vent_line(l).unwrap().1).collect()
 }
 
-fn part1(input: &[VentLine]) -> usize {
+pub fn part1(input: &str) -> usize {
+    let input = generator(input);
     let vent_lines: Vec<&VentLine> = input
-        .into_iter()
+        .iter()
         .filter(|line| line.is_horizontal() || line.is_vertical())
         .collect();
 
@@ -123,7 +119,9 @@ fn part1(input: &[VentLine]) -> usize {
         .count()
 }
 
-fn part2(input: &[VentLine]) -> usize {
+pub fn part2(input: &str) -> usize {
+    let input = generator(input);
+
     let vents: Vec<_> = input.iter().flat_map(|line| line.points()).collect();
 
     vents
@@ -136,8 +134,6 @@ fn part2(input: &[VentLine]) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     const SAMPLE: &str = "0,9 -> 5,9
 8,0 -> 0,8
 9,4 -> 3,4
@@ -150,12 +146,12 @@ mod tests {
 5,5 -> 8,2";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE)), 5);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 5);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE)), 12);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 12);
     }
 }

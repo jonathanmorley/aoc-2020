@@ -1,4 +1,3 @@
-use anyhow::Result;
 use itertools::Itertools;
 
 #[derive(Clone, Debug)]
@@ -105,7 +104,9 @@ fn generator(input: &str) -> HeightMap {
     )
 }
 
-fn part1(input: &HeightMap) -> u32 {
+pub fn part1(input: &str) -> u32 {
+    let input = generator(input);
+
     input
         .local_minima()
         .into_iter()
@@ -113,7 +114,9 @@ fn part1(input: &HeightMap) -> u32 {
         .sum()
 }
 
-fn part2(input: &HeightMap) -> u64 {
+pub fn part2(input: &str) -> u64 {
+    let input = generator(input);
+
     input
         .to_owned()
         .extract_basins()
@@ -136,12 +139,12 @@ mod tests {
 9899965678";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE)), 15);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 15);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE)), 1134);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 1134);
     }
 }

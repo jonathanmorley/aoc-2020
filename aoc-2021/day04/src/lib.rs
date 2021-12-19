@@ -91,8 +91,10 @@ fn generator(input: &str) -> (Vec<u32>, Vec<Board>) {
     (numbers, boards)
 }
 
-fn part1(input: &(Vec<u32>, Vec<Board>)) -> u32 {
-    let (numbers, boards) = input;
+pub fn part1(input: &str) -> u32 {
+    let input = generator(input);
+
+    let (numbers, boards) = &input;
     let mut marked_boards: Vec<MarkedBoard> = boards
         .into_iter()
         .map(ToOwned::to_owned)
@@ -113,8 +115,10 @@ fn part1(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     unreachable!()
 }
 
-fn part2(input: &(Vec<u32>, Vec<Board>)) -> u32 {
-    let (numbers, boards) = input;
+pub fn part2(input: &str) -> u32 {
+    let input = generator(input);
+
+    let (numbers, boards) = &input;
     let mut marked_boards: Vec<MarkedBoard> = boards
         .into_iter()
         .map(ToOwned::to_owned)
@@ -166,12 +170,12 @@ mod tests {
  2  0 12  3  7";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE)), 4512);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 4512);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE)), 1924);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 1924);
     }
 }

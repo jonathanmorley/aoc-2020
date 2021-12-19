@@ -52,13 +52,13 @@ fn epsilon(readings: &[String]) -> Result<u32> {
     u32::from_str_radix(&epsilon, 2).map_err(Into::into)
 }
 
-fn part1(input: &str) -> Result<u64> {
+pub fn part1(input: &str) -> u64 {
     let input_str: Vec<String> = input.lines().map(ToOwned::to_owned).collect();
 
-    let gamma = gamma(&input_str)?;
-    let epsilon = epsilon(&input_str)?;
+    let gamma = gamma(&input_str).unwrap();
+    let epsilon = epsilon(&input_str).unwrap();
 
-    Ok(gamma as u64 * epsilon as u64)
+    gamma as u64 * epsilon as u64
 }
 
 fn filter_readings(readings: Vec<String>, index: usize, filter_bit: char) -> Vec<String> {
@@ -100,13 +100,13 @@ fn co2_scrubber(readings: Vec<String>) -> Result<u32> {
     u32::from_str_radix(&candidates[0], 2).map_err(Into::into)
 }
 
-fn part2(input: &str) -> Result<u64> {
+pub fn part2(input: &str) -> u64 {
     let input_chars: Vec<String> = input.lines().map(ToOwned::to_owned).collect();
 
-    let oxygen_generator = oxygen_generator(input_chars.clone())?;
-    let co2_scrubber = co2_scrubber(input_chars)?;
+    let oxygen_generator = oxygen_generator(input_chars.clone()).unwrap();
+    let co2_scrubber = co2_scrubber(input_chars).unwrap();
 
-    Ok(oxygen_generator as u64 * co2_scrubber as u64)
+    oxygen_generator as u64 * co2_scrubber as u64
 }
 
 #[cfg(test)]
@@ -127,12 +127,12 @@ mod tests {
 01010";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(SAMPLE).unwrap(), 198);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 198);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(SAMPLE).unwrap(), 230);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 230);
     }
 }

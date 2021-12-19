@@ -1,5 +1,4 @@
 use anyhow::Result;
-use nalgebra::{ArrayStorage, SMatrix, SVector};
 
 fn generator(input: &str) -> [u64; 9] {
     input
@@ -23,51 +22,27 @@ fn lanternfish(initial: Vec<u64>, day: u32) -> u64 {
     school.into_iter().sum()
 }
 
-fn part1(input: &[u64; 9]) -> u64 {
+pub fn part1(input: &str) -> u64 {
+    let input = generator(input);
     lanternfish(Vec::from_iter(input.to_owned()), 80)
 }
 
-fn part2(input: &[u64; 9]) -> u64 {
+pub fn part2(input: &str) -> u64 {
+    let input = generator(input);
     lanternfish(Vec::from_iter(input.to_owned()), 256)
-}
-
-const LANTERNFISH_MATRIX: SMatrix<u64, 9, 9> = SMatrix::from_array_storage(ArrayStorage([
-    [0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 1, 0],
-]));
-
-fn part2_matrix(input: &[u64; 9]) -> u64 {
-    let mut m = LANTERNFISH_MATRIX;
-    (1..256).for_each(|_| m *= LANTERNFISH_MATRIX);
-
-    (m * SVector::from_column_slice(input)).sum()
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     const SAMPLE: &str = "3,4,3,1,2";
 
     #[test]
-    fn sample1() {
-        assert_eq!(part1(&generator(SAMPLE)), 5934);
+    fn part1() {
+        assert_eq!(super::part1(SAMPLE), 5934);
     }
 
     #[test]
-    fn sample2() {
-        assert_eq!(part2(&generator(SAMPLE)), 26984457539);
-    }
-
-    #[test]
-    fn matrix2() {
-        assert_eq!(part2_matrix(&generator(SAMPLE)), 26984457539);
+    fn part2() {
+        assert_eq!(super::part2(SAMPLE), 26984457539);
     }
 }

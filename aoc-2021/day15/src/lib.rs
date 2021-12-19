@@ -18,7 +18,9 @@ pub fn generator(input: &str) -> HashMap<(i32, i32), u64> {
         .collect()
 }
 
-pub fn part1(nodes: HashMap<(i32, i32), u64>) -> u64 {    
+pub fn part1(input: &str) -> u64 {    
+    let nodes = generator(input);
+    
     let mut graph = DiGraphMap::new();
     
     for (location, _) in &nodes {
@@ -42,8 +44,8 @@ pub fn part1(nodes: HashMap<(i32, i32), u64>) -> u64 {
     ).unwrap().0
 }
 
-pub fn part2(nodes: HashMap<(i32, i32), u64>) -> u64 {
-    let mut nodes = nodes;
+pub fn part2(input: &str) -> u64 {
+    let mut nodes = generator(input);
 
     let min = nodes.keys().min().unwrap().to_owned();
     let max = nodes.keys().max().unwrap().to_owned();
@@ -109,11 +111,11 @@ mod tests {
 
     #[test]
     fn sample1() {
-        assert_eq!(part1(generator(SAMPLE)), 40);
+        assert_eq!(part1(SAMPLE), 40);
     }
 
     #[test]
     fn sample2() {
-        assert_eq!(part2(generator(SAMPLE)), 315);
+        assert_eq!(part2(SAMPLE), 315);
     }
 }
