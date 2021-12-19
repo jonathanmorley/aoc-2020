@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use itertools::Itertools;
 use nom::{
     bytes::complete::tag,
-    character::complete::{anychar},
+    character::complete::anychar,
     sequence::{pair, separated_pair},
     IResult,
 };
@@ -13,11 +13,8 @@ type Pattern = (char, char);
 type Rules = HashMap<Pattern, char>;
 
 fn parse_rule(input: &str) -> IResult<&str, (Pattern, char)> {
-    let (input, (pattern, result)) = separated_pair(
-        pair(anychar, anychar),
-        tag(" -> "),
-        anychar,
-    )(input)?;
+    let (input, (pattern, result)) =
+        separated_pair(pair(anychar, anychar), tag(" -> "), anychar)(input)?;
 
     Ok((input, (pattern, result)))
 }
@@ -26,28 +23,24 @@ fn generator_part1(input: &str) -> (Template, Rules) {
     let mut blocks = input.split("\n\n");
 
     (
-        blocks
-            .next()
-            .unwrap()
-            .chars()
-            .collect(),
+        blocks.next().unwrap().chars().collect(),
         blocks
             .next()
             .unwrap()
             .lines()
             .map(|line| parse_rule(line).unwrap().1)
-            .collect()
+            .collect(),
     )
 }
 
 pub fn part1(input: &str) -> u64 {
     let (template, rules) = generator_part1(input);
-    
+
     let mut template = template.to_owned();
-    
+
     for _ in 0..10 {
         for (i, window) in template.clone().windows(2).enumerate() {
-            template.insert(2*i+1, rules[&(window[0], window[1])]);
+            template.insert(2 * i + 1, rules[&(window[0], window[1])]);
         }
     }
 
@@ -57,24 +50,20 @@ pub fn part1(input: &str) -> u64 {
         .minmax_by_key(|(_, count)| *count)
         .into_option()
         .unwrap();
-    
+
     (*max.1 as u64) - (*min.1 as u64)
 }
 
 pub fn part2(input: &str) -> u64 {
     let mut blocks = input.split("\n\n");
 
-    let template = blocks
-        .next()
-        .unwrap()
-        .chars()
-        .collect::<Vec<_>>();
+    let template = blocks.next().unwrap().chars().collect::<Vec<_>>();
 
     let mut counts = template
         .windows(2)
         .map(|window| (window[0], window[1]))
         .counts();
-    
+
     let rules: HashMap<(char, char), char> = blocks
         .next()
         .unwrap()
@@ -97,10 +86,7 @@ pub fn part2(input: &str) -> u64 {
                     .unwrap_or_default();
                 counts.insert((rules[&pattern], pattern.1), right_count + count);
 
-                let pattern_count = counts
-                    .get(&pattern)
-                    .map(ToOwned::to_owned)
-                    .unwrap();
+                let pattern_count = counts.get(&pattern).map(ToOwned::to_owned).unwrap();
                 counts.insert(pattern, pattern_count - count);
             }
         }
@@ -120,10 +106,10 @@ pub fn part2(input: &str) -> u64 {
     *letter_counts.get_mut(&last).unwrap() += 1;
 
     let (min, max) = letter_counts
-    .iter()
-    .minmax_by_key(|(_, count)| *count)
-    .into_option()
-    .unwrap();
+        .iter()
+        .minmax_by_key(|(_, count)| *count)
+        .into_option()
+        .unwrap();
 
     (*max.1 as u64) - (*min.1 as u64)
 }
@@ -149,7 +135,6 @@ BC -> B
 CC -> N
 CN -> C";
 
-    
     #[test]
     fn part1() {
         assert_eq!(super::part1(SAMPLE_1), 1588);

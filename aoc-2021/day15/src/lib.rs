@@ -1,28 +1,25 @@
 use std::collections::HashMap;
 
-use petgraph::graphmap::DiGraphMap;
 use petgraph::algo::astar::astar;
+use petgraph::graphmap::DiGraphMap;
 
 pub fn generator(input: &str) -> HashMap<(i32, i32), u64> {
     input
         .lines()
         .enumerate()
         .flat_map(|(y, line)| {
-            line
-                .chars()
+            line.chars()
                 .enumerate()
-                .map(move |(x, c)| {
-                    ((x as i32, y as i32), c.to_digit(10).unwrap() as u64)
-                })
+                .map(move |(x, c)| ((x as i32, y as i32), c.to_digit(10).unwrap() as u64))
         })
         .collect()
 }
 
-pub fn part1(input: &str) -> u64 {    
+pub fn part1(input: &str) -> u64 {
     let nodes = generator(input);
-    
+
     let mut graph = DiGraphMap::new();
-    
+
     for (location, _) in &nodes {
         for (dx, dy) in [(0, 1), (1, 0), (-1, 0), (0, -1)] {
             let neighbour = (location.0 + dx, location.1 + dy);
@@ -32,7 +29,7 @@ pub fn part1(input: &str) -> u64 {
             }
         }
     }
-    
+
     let max = graph.nodes().max().unwrap();
 
     astar(
@@ -40,8 +37,10 @@ pub fn part1(input: &str) -> u64 {
         (0, 0),
         |finish| finish == max,
         |(_, _, weight)| *weight,
-        |(x, y)| ((max.0 - x) + (max.1 - y)).abs() as u64 
-    ).unwrap().0
+        |(x, y)| ((max.0 - x) + (max.1 - y)).abs() as u64,
+    )
+    .unwrap()
+    .0
 }
 
 pub fn part2(input: &str) -> u64 {
@@ -56,7 +55,7 @@ pub fn part2(input: &str) -> u64 {
         for i in 1..5 {
             nodes.insert(
                 (x + (span_x * i), y),
-                ((((weight as i32 + i) - 1) % 9) + 1) as u64
+                ((((weight as i32 + i) - 1) % 9) + 1) as u64,
             );
         }
     }
@@ -66,13 +65,13 @@ pub fn part2(input: &str) -> u64 {
         for i in 1..5 {
             nodes.insert(
                 (x, y + (span_y * i)),
-                ((((weight as i32 + i) - 1) % 9) + 1) as u64
+                ((((weight as i32 + i) - 1) % 9) + 1) as u64,
             );
         }
     }
-    
+
     let mut graph = DiGraphMap::new();
-    
+
     for (location, _) in &nodes {
         for (dx, dy) in [(0, 1), (1, 0), (-1, 0), (0, -1)] {
             let neighbour = (location.0 + dx, location.1 + dy);
@@ -82,16 +81,18 @@ pub fn part2(input: &str) -> u64 {
             }
         }
     }
-    
-    let max = graph.nodes().max().unwrap();    
+
+    let max = graph.nodes().max().unwrap();
 
     astar(
         &graph,
         (0, 0),
         |finish| finish == max,
         |(_, _, weight)| *weight,
-        |(x, y)| ((max.0 - x) + (max.1 - y)).abs() as u64 
-    ).unwrap().0
+        |(x, y)| ((max.0 - x) + (max.1 - y)).abs() as u64,
+    )
+    .unwrap()
+    .0
 }
 
 #[cfg(test)]

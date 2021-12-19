@@ -1,20 +1,20 @@
 use std::iter;
 
-use bitvec::prelude::*;
 use bitvec::bits;
-use nom::bytes::complete::{tag, take};
+use bitvec::prelude::*;
 use nom::branch::alt;
+use nom::bytes::complete::{tag, take};
 use nom::combinator::map;
+use nom::multi::many_m_n;
 use nom::multi::{many0, many_till};
 use nom::sequence::{preceded, tuple};
 use nom::IResult;
-use nom::multi::many_m_n;
 use nom_bitvec::BSlice;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Packet {
     version: u8,
-    content: PacketContent
+    content: PacketContent,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -34,19 +34,18 @@ impl IntoIterator for Packet {
     type IntoIter = iter::Chain<iter::Once<Self::Item>, std::vec::IntoIter<Self::Item>>;
 
     fn into_iter(self) -> Self::IntoIter {
-        iter::once(self.clone())
-            .chain(match self.content {
-                PacketContent::Literal(_) => vec![],
-                PacketContent::Sum(packets)
-                | PacketContent::Product(packets)
-                | PacketContent::Minimum(packets)
-                | PacketContent::Maximum(packets)
-                | PacketContent::GreaterThan(packets)
-                | PacketContent::LessThan(packets)
-                | PacketContent::EqualTo(packets) => {
-                    packets.into_iter().flat_map(Packet::into_iter).collect()
-                }
-            })
+        iter::once(self.clone()).chain(match self.content {
+            PacketContent::Literal(_) => vec![],
+            PacketContent::Sum(packets)
+            | PacketContent::Product(packets)
+            | PacketContent::Minimum(packets)
+            | PacketContent::Maximum(packets)
+            | PacketContent::GreaterThan(packets)
+            | PacketContent::LessThan(packets)
+            | PacketContent::EqualTo(packets) => {
+                packets.into_iter().flat_map(Packet::into_iter).collect()
+            }
+        })
     }
 }
 
@@ -58,9 +57,27 @@ impl From<Packet> for u64 {
             PacketContent::Minimum(packets) => packets.into_iter().map(u64::from).min().unwrap(),
             PacketContent::Maximum(packets) => packets.into_iter().map(u64::from).max().unwrap(),
             PacketContent::Literal(value) => value,
-            PacketContent::GreaterThan(packets) => if u64::from(packets[0].clone()).gt(&u64::from(packets[1].clone())) { 1 } else { 0 },
-            PacketContent::LessThan(packets) => if u64::from(packets[0].clone()).lt(&u64::from(packets[1].clone())) { 1 } else { 0 },
-            PacketContent::EqualTo(packets) => if u64::from(packets[0].clone()).eq(&u64::from(packets[1].clone())) { 1 } else { 0 },
+            PacketContent::GreaterThan(packets) => {
+                if u64::from(packets[0].clone()).gt(&u64::from(packets[1].clone())) {
+                    1
+                } else {
+                    0
+                }
+            }
+            PacketContent::LessThan(packets) => {
+                if u64::from(packets[0].clone()).lt(&u64::from(packets[1].clone())) {
+                    1
+                } else {
+                    0
+                }
+            }
+            PacketContent::EqualTo(packets) => {
+                if u64::from(packets[0].clone()).eq(&u64::from(packets[1].clone())) {
+                    1
+                } else {
+                    0
+                }
+            }
         }
     }
 }
@@ -74,18 +91,20 @@ pub enum Length {
 fn parse_header(input: BSlice<Msb0, u8>) -> IResult<BSlice<Msb0, u8>, (u8, u8)> {
     tuple((
         map(take(3usize), |bits: BSlice<Msb0, u8>| bits.0.load_be()),
-        map(take(3usize), |bits: BSlice<Msb0, u8>| bits.0.load_be())
+        map(take(3usize), |bits: BSlice<Msb0, u8>| bits.0.load_be()),
     ))(input)
 }
 
 fn parse_length(input: BSlice<Msb0, u8>) -> IResult<BSlice<Msb0, u8>, Length> {
     alt((
-        map(preceded(tag(BSlice(bits![0])), take(15usize)), |bits: BSlice<Msb0, u8>| {
-            Length::Bits(bits.0.load_be())
-        }),
-        map(preceded(tag(BSlice(bits![1])), take(11usize)), |bits: BSlice<Msb0, u8>| {
-            Length::Packets(bits.0.load_be())
-        })
+        map(
+            preceded(tag(BSlice(bits![0])), take(15usize)),
+            |bits: BSlice<Msb0, u8>| Length::Bits(bits.0.load_be()),
+        ),
+        map(
+            preceded(tag(BSlice(bits![1])), take(11usize)),
+            |bits: BSlice<Msb0, u8>| Length::Packets(bits.0.load_be()),
+        ),
     ))(input)
 }
 
@@ -101,7 +120,7 @@ fn parse_literal(input: BSlice<Msb0, u8>) -> IResult<BSlice<Msb0, u8>, u64> {
         bits.extend(slice.0);
     }
     bits.extend(terminal.0);
-    
+
     Ok((input, bits.load_be()))
 }
 
@@ -111,37 +130,49 @@ fn parse_packet(input: BSlice<Msb0, u8>) -> IResult<BSlice<Msb0, u8>, Packet> {
     match header {
         (version, 4) => {
             let (input, content) = parse_literal(input)?;
-            Ok((input, Packet { version, content: PacketContent::Literal(content) }))
-        },
+            Ok((
+                input,
+                Packet {
+                    version,
+                    content: PacketContent::Literal(content),
+                },
+            ))
+        }
         (version, type_id) => {
             let (input, length) = parse_length(input)?;
             let (input, packets) = parse_packets(input, length)?;
 
-            Ok((input, Packet {
-                version,
-                content: match type_id {
-                    0 => PacketContent::Sum(packets),
-                    1 => PacketContent::Product(packets),
-                    2 => PacketContent::Minimum(packets),
-                    3 => PacketContent::Maximum(packets),
-                    5 => PacketContent::GreaterThan(packets),
-                    6 => PacketContent::LessThan(packets),
-                    7 => PacketContent::EqualTo(packets),
-                    _ => unreachable!()
-                }
-            }))
+            Ok((
+                input,
+                Packet {
+                    version,
+                    content: match type_id {
+                        0 => PacketContent::Sum(packets),
+                        1 => PacketContent::Product(packets),
+                        2 => PacketContent::Minimum(packets),
+                        3 => PacketContent::Maximum(packets),
+                        5 => PacketContent::GreaterThan(packets),
+                        6 => PacketContent::LessThan(packets),
+                        7 => PacketContent::EqualTo(packets),
+                        _ => unreachable!(),
+                    },
+                },
+            ))
         }
     }
 }
 
-fn parse_packets(input: BSlice<Msb0, u8>, length: Length) -> IResult<BSlice<Msb0, u8>, Vec<Packet>> {    
+fn parse_packets(
+    input: BSlice<Msb0, u8>,
+    length: Length,
+) -> IResult<BSlice<Msb0, u8>, Vec<Packet>> {
     match length {
         Length::Bits(l) => {
             let (input, packet_data) = take(l as usize)(input)?;
             let (_, packets) = many0(parse_packet)(packet_data)?;
             Ok((input, packets))
-        },
-        Length::Packets(l) => many_m_n(l as usize, l as usize, parse_packet)(input)
+        }
+        Length::Packets(l) => many_m_n(l as usize, l as usize, parse_packet)(input),
     }
 }
 

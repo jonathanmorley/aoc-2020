@@ -14,7 +14,7 @@ mod tests {
     fn part1() {
         assert_eq!(super::part1(SAMPLE), unimplemented!());
     }
-    
+
     #[test]
     fn part2() {
         assert_eq!(super::part2(SAMPLE), unimplemented!());
