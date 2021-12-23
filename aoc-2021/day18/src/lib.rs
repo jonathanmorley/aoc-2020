@@ -183,16 +183,11 @@ pub fn part1(input: &str) -> u64 {
 }
 
 pub fn part2(input: &str) -> u64 {
-    let snailfishes = input
+    input
         .lines()
         .map(|l| Snailfish(l.to_owned()))
-        .collect::<Vec<_>>();
-
-    snailfishes
-        .clone()
-        .into_iter()
-        .cartesian_product(snailfishes.into_iter())
-        .map(|(a, b)| a + b)
+        .tuple_combinations()
+        .flat_map(|(a, b)| [a.clone() + b.clone(), b + a])
         .map(|sum| sum.magnitude())
         .max()
         .unwrap()
