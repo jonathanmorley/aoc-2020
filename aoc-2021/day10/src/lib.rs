@@ -122,8 +122,6 @@ pub fn part2(input: &str) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     const SAMPLE: &str = "[({(<(())[]>[[{[]{<()<>>
 [(()[<>])]({[<{<<[]>>(
 {([(<{}[<>[]}>{[]{[(<()>

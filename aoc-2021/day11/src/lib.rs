@@ -166,8 +166,6 @@ pub fn part2(input: &str) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     const SAMPLE: &str = "5483143223
 2745854711
 5264556173
