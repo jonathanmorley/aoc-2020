@@ -22,10 +22,14 @@ aoc-2021-day12 = { version = "0.1.0", path = "aoc-2021/day12" }
 aoc-2021-day13 = { version = "0.1.0", path = "aoc-2021/day13" }
 aoc-2021-day14 = { version = "0.1.0", path = "aoc-2021/day14" }
 aoc-2021-day15 = { version = "0.1.0", path = "aoc-2021/day15" }
-aoc-2021-day16 = { version = "0.1.0", path = "aoc-2021/day16" }
+#aoc-2021-day16 = { version = "0.1.0", path = "aoc-2021/day16" }
 aoc-2021-day17 = { version = "0.1.0", path = "aoc-2021/day17" }
 aoc-2021-day18 = { version = "0.1.0", path = "aoc-2021/day18" }
+aoc-2022-day01 = { version = "0.1.0", path = "aoc-2022/day01" }
 clap = { version = "3.0.0-rc.7", features = ["derive"] }
 
 [workspace]
-members = ["aoc-2021/*"]
+members = [
+  "aoc-2021/*",
+  "aoc-2022/*"
+]
