@@ -1,4 +1,5 @@
-pub fn part1<'a>(input: &str) -> usize {
+#[allow(clippy::identity_op)]
+pub fn part1(input: &str) -> usize {
     input.lines()
         .map(|event| match event {
             "A X" => 1 + 3,
@@ -15,7 +16,8 @@ pub fn part1<'a>(input: &str) -> usize {
         .sum::<usize>()
 }
 
-pub fn part2<'a>(input: &str) -> usize {
+#[allow(clippy::identity_op)]
+pub fn part2(input: &str) -> usize {
     input.lines()
         .map(|event| match event {
             "A X" => 3 + 0,

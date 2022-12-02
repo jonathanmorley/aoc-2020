@@ -20,3 +20,5 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Test
         run: cargo test --workspace
+      - name: Clippy
+        run: cargo clippy --workspace
