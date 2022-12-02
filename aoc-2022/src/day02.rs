@@ -1,11 +1,6 @@
-pub fn generator(input: &str) -> Vec<&str> {
-    input.lines().collect()
-}
-
-pub fn part1(input: &[&str]) -> usize {
-    input
-        .into_iter()
-        .map(|event| match *event {
+pub fn part1<'a>(input: &str) -> usize {
+    input.lines()
+        .map(|event| match event {
             "A X" => 1 + 3,
             "A Y" => 2 + 6,
             "A Z" => 3 + 0,
@@ -20,10 +15,9 @@ pub fn part1(input: &[&str]) -> usize {
         .sum::<usize>()
 }
 
-pub fn part2(input: &[&str]) -> usize {
-    input
-        .into_iter()
-        .map(|event| match *event {
+pub fn part2<'a>(input: &str) -> usize {
+    input.lines()
+        .map(|event| match event {
             "A X" => 3 + 0,
             "A Y" => 1 + 3,
             "A Z" => 2 + 6,
@@ -48,11 +42,11 @@ C Z";
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(&generator(SAMPLE)), 15);
+        assert_eq!(part1(SAMPLE), 15);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(&generator(SAMPLE)), 12);
+        assert_eq!(part2(SAMPLE), 12);
     }
 }
