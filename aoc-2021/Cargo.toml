@@ -1,0 +1,21 @@
+[package]
+name = "aoc-2021"
+version = "0.1.0"
+authors = ["Morley, Jonathan <jmorley@cvent.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+aoc-main = "0.4.1"
+itertools = "0.10.1"
+anyhow = "1.0.51"
+strum = { version = "0.23.0", features = ["derive"] }
+nom = "7.1.0"
+num = "0.4.0"
+bimap = "0.6.1"
+thiserror = "1.0.30"
+petgraph = "0.6.0"
+bitvec = "1.0.0"
+hex = "0.4.3"
+bitvec-nom = { git = 'https://github.com/XAMPPRocky/nom-bitvec', branch = 'main' }

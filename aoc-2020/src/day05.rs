@@ -3,8 +3,6 @@ use itertools::Itertools;
 use std::convert::TryFrom;
 use std::{num::TryFromIntError, str::FromStr};
 
-use aoc_runner_derive::{aoc, aoc_generator};
-
 #[derive(Debug, Hash, PartialEq)]
 pub struct Seat(u16);
 
@@ -34,12 +32,10 @@ impl Seat {
     }
 }
 
-#[aoc_generator(day5)]
 pub fn parse(input: &str) -> Result<Vec<Seat>> {
     input.lines().map(Seat::from_str).collect()
 }
 
-#[aoc(day5, part1)]
 pub fn part_1(input: &[Seat]) -> Option<u16> {
     input.into_iter().map(|s| s.0).max()
 }
@@ -48,7 +44,6 @@ fn minimum(input: &[Seat]) -> Option<u16> {
     input.into_iter().map(|s| s.0).min()
 }
 
-#[aoc(day5, part2)]
 pub fn part_2(input: &[Seat]) -> Option<u16> {
     if let Some(max) = part_1(input) {
         if let Some(min) = minimum(input) {

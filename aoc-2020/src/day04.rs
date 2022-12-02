@@ -3,8 +3,6 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::{convert::TryFrom, str::FromStr};
 
-use aoc_runner_derive::aoc;
-
 #[derive(Debug, Hash, PartialEq)]
 pub struct Credentials {
     birth_year: String,
@@ -194,12 +192,10 @@ pub fn parse(input: &str) -> impl Iterator<Item = Credentials> + '_ {
         .filter_map(Result::ok)
 }
 
-#[aoc(day4, part1)]
 pub fn part_1(input: &str) -> usize {
     parse(input).count()
 }
 
-#[aoc(day4, part2)]
 pub fn part_2(input: &str) -> usize {
     parse(input)
         .map(ValidatedCredentials::try_from)

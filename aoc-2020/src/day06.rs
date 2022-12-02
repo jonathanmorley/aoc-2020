@@ -1,7 +1,6 @@
 use std::{collections::HashSet, hash::Hash, hash::Hasher, str::FromStr};
 
 use anyhow::Result;
-use aoc_runner_derive::{aoc, aoc_generator};
 
 #[derive(Debug, PartialEq)]
 pub struct Answer(HashSet<char>);
@@ -51,17 +50,14 @@ impl AnswerSet {
     }
 }
 
-#[aoc_generator(day6)]
 pub fn parse(input: &str) -> Result<Vec<AnswerSet>> {
     input.split("\n\n").map(AnswerSet::from_str).collect()
 }
 
-#[aoc(day6, part1)]
 pub fn part_1(input: &[AnswerSet]) -> usize {
     input.into_iter().map(|set| set.any().iter().count()).sum()
 }
 
-#[aoc(day6, part2)]
 pub fn part_2(input: &[AnswerSet]) -> usize {
     input.into_iter().map(|set| set.all().map(|hs| hs.iter().count()).unwrap_or_default()).sum()
 }

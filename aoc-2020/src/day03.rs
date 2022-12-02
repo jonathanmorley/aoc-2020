@@ -1,5 +1,3 @@
-use aoc_runner_derive::aoc;
-
 fn count_trees<'a>(lines: impl Iterator<Item = &'a str>, right: usize, down: usize) -> usize {
     lines
         .step_by(down)
@@ -10,12 +8,10 @@ fn count_trees<'a>(lines: impl Iterator<Item = &'a str>, right: usize, down: usi
         .count()
 }
 
-#[aoc(day3, part1)]
 pub fn part_1(input: &str) -> usize {
     count_trees(input.lines(), 3, 1)
 }
 
-#[aoc(day3, part2)]
 pub fn part_2(input: &str) -> usize {
     [
         count_trees(input.lines(), 1, 1),

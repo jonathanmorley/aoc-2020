@@ -1,8 +1,6 @@
 use anyhow::{bail, Result};
 use std::str::FromStr;
 
-use aoc_runner_derive::{aoc, aoc_generator};
-
 #[derive(Clone, Copy, Debug, Hash, PartialEq)]
 pub struct Point(i64, i64);
 
@@ -89,12 +87,10 @@ impl Wire {
     }
 }
 
-#[aoc_generator(day3)]
 pub fn parse(input: &str) -> Result<Vec<Wire>> {
     input.lines().map(|line| line.parse()).collect()
 }
 
-#[aoc(day3, part1)]
 pub fn part_1(input: &[Wire]) -> usize {
     if let Some(wire) = input.get(0) {
         dbg!(wire.points());
@@ -103,7 +99,6 @@ pub fn part_1(input: &[Wire]) -> usize {
     input.len()
 }
 
-#[aoc(day3, part2)]
 pub fn part_2(input: &[Wire]) -> usize {
     input.len()
 }

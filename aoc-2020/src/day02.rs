@@ -1,6 +1,5 @@
 use std::str::FromStr;
 
-use aoc_runner_derive::aoc;
 use recap::Recap;
 use serde::Deserialize;
 
@@ -41,12 +40,10 @@ pub fn parse(input: &str) -> impl Iterator<Item = PasswordValidator> + '_ {
     input.lines().map(FromStr::from_str).map(|x| x.unwrap())
 }
 
-#[aoc(day2, part1)]
 pub fn part_1(input: &str) -> usize {
     parse(input).filter(|x| x.valid_by_count()).count()
 }
 
-#[aoc(day2, part2)]
 pub fn part_2(input: &str) -> usize {
     parse(input).filter(|x| x.valid_by_index()).count()
 }

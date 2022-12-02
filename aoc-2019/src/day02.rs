@@ -1,9 +1,6 @@
-use aoc_runner_derive::aoc;
-
 use crate::intcode::Stack;
 use anyhow::{bail, Result};
 
-#[aoc(day2, part1)]
 pub fn part_1(input: &str) -> Result<usize> {
     let mut stack: Stack = input.parse()?;
 
@@ -13,7 +10,6 @@ pub fn part_1(input: &str) -> Result<usize> {
     stack.output()
 }
 
-#[aoc(day2, part2)]
 pub fn part_2(input: &str) -> Result<usize> {
     for noun in 0..=99 {
         for verb in 0..=99 {

@@ -1,19 +1,14 @@
-use aoc_runner_derive::{aoc, aoc_generator};
-
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-#[aoc_generator(day1)]
 pub fn parse(input: &str) -> Result<Vec<u32>, ParseIntError> {
     input.lines().map(FromStr::from_str).collect()
 }
 
-#[aoc(day1, part1)]
 pub fn part_1(input: &[u32]) -> u32 {
     input.into_iter().map(marginal_fuel_required).sum()
 }
 
-#[aoc(day1, part2)]
 pub fn part_2(input: &[u32]) -> u32 {
     input.into_iter().map(fuel_required).sum()
 }

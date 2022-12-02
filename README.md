@@ -1,25 +1,11 @@
 # Advent of Code
 
-## Setup
-
-```
-cargo install cargo-aoc
-cargo install
-```
-
-## Fetch input
-
-`cargo aoc input`
+# Usage
 
 ## Testing
 
-`cargo test`
+`cargo test [--package aoc-<year>]`
 
 ## Running
 
-`cargo aoc`
-
-## Usage
-
-- `cargo run --release --bin aoc-<year>` to run all days in the year
-- `cargo test` to run all tests
+`cargo run [--package aoc-<year>]`

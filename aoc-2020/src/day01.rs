@@ -1,15 +1,12 @@
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-use aoc_runner_derive::{aoc, aoc_generator};
 use fnv::FnvHashSet;
 
-#[aoc_generator(day1)]
 pub fn parse(input: &str) -> Result<FnvHashSet<u32>, ParseIntError> {
     input.lines().map(FromStr::from_str).collect()
 }
 
-#[aoc(day1, part1)]
 pub fn part_1(input: &FnvHashSet<u32>) -> Option<u32> {
     for &x in input {
         if x < 2020 / 2 {
@@ -24,7 +21,6 @@ pub fn part_1(input: &FnvHashSet<u32>) -> Option<u32> {
     None
 }
 
-#[aoc(day1, part2)]
 pub fn part_2(input: &FnvHashSet<u32>) -> Option<u32> {
     for &x in input {
         if x < 2020 / 3 {
