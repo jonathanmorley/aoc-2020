@@ -82,12 +82,12 @@ impl FromStr for Height {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.ends_with("cm") {
-            return Ok(Self::Centimetres(s[..s.len() - 2].parse()?));
+        if let Some(height) = s.strip_suffix("cm") {
+            return Ok(Self::Centimetres(height.parse()?));
         }
 
-        if s.ends_with("in") {
-            return Ok(Self::Inches(s[..s.len() - 2].parse()?));
+        if let Some(height) = s.strip_suffix("in") {
+            return Ok(Self::Inches(height.parse()?));
         }
 
         bail!("Invalid height ({})", s)
