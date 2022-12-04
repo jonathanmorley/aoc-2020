@@ -32,11 +32,7 @@ pub fn part2(input: &str) -> usize {
 
     let windows = izip!(offset_2, offset_1, input).filter_map(|(a, b, c)| {
         if let Some(a) = a {
-            if let Some(b) = b {
-                Some(a + b + c)
-            } else {
-                None
-            }
+            b.map(|b| a + b + c)
         } else {
             None
         }

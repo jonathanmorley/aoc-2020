@@ -86,8 +86,8 @@ impl VentLine {
 
         (0..=steps)
             .map(|step| Coordinate {
-                x: (self.0.x.clone() as i64 + (step * step_x)) as u32,
-                y: (self.0.y.clone() as i64 + (step * step_y)) as u32,
+                x: (self.0.x as i64 + (step * step_x)) as u32,
+                y: (self.0.y as i64 + (step * step_y)) as u32,
             })
             .collect()
     }

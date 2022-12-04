@@ -2,7 +2,7 @@ use anyhow::Result;
 
 fn generator(input: &str) -> [u64; 9] {
     input
-        .split(",")
+        .split(',')
         .map(str::parse)
         .map(Result::unwrap)
         .fold([0; 9], |mut acc, fish: usize| {

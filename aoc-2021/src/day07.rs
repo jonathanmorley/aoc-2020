@@ -2,7 +2,7 @@ use anyhow::Result;
 
 fn generator(input: &str) -> Result<Vec<u32>> {
     input
-        .split(",")
+        .split(',')
         .map(str::parse)
         .collect::<Result<_, _>>()
         .map_err(Into::into)
