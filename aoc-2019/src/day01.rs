@@ -6,11 +6,11 @@ pub fn parse(input: &str) -> Result<Vec<u32>, ParseIntError> {
 }
 
 pub fn part_1(input: &[u32]) -> u32 {
-    input.into_iter().map(marginal_fuel_required).sum()
+    input.iter().map(marginal_fuel_required).sum()
 }
 
 pub fn part_2(input: &[u32]) -> u32 {
-    input.into_iter().map(fuel_required).sum()
+    input.iter().map(fuel_required).sum()
 }
 
 fn marginal_fuel_required(weight: &u32) -> u32 {

@@ -3,7 +3,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::{convert::TryFrom, str::FromStr};
 
-#[derive(Debug, Hash, PartialEq)]
+#[derive(Debug, Hash, PartialEq, Eq)]
 pub struct Credentials {
     birth_year: String,
     issue_year: String,
@@ -284,14 +284,14 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
 
     #[test]
     fn test_part_1() -> Result<()> {
-        assert_eq!(part_1(&SAMPLE_1), 2);
+        assert_eq!(part_1(SAMPLE_1), 2);
         Ok(())
     }
 
     #[test]
     fn test_part_2() -> Result<()> {
-        assert_eq!(part_2(&SAMPLE_1), 2);
-        assert_eq!(part_2(&SAMPLE_2), 4);
+        assert_eq!(part_2(SAMPLE_1), 2);
+        assert_eq!(part_2(SAMPLE_2), 4);
         Ok(())
     }
 }

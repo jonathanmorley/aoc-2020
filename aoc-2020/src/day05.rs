@@ -2,7 +2,7 @@ use anyhow::Result;
 use itertools::Itertools;
 use std::str::FromStr;
 
-#[derive(Debug, Hash, PartialEq)]
+#[derive(Debug, Hash, PartialEq, Eq)]
 pub struct Seat(u16);
 
 impl FromStr for Seat {
@@ -26,18 +26,18 @@ pub fn parse(input: &str) -> Result<Vec<Seat>> {
 }
 
 pub fn part_1(input: &[Seat]) -> Option<u16> {
-    input.into_iter().map(|s| s.0).max()
+    input.iter().map(|s| s.0).max()
 }
 
 fn minimum(input: &[Seat]) -> Option<u16> {
-    input.into_iter().map(|s| s.0).min()
+    input.iter().map(|s| s.0).min()
 }
 
 pub fn part_2(input: &[Seat]) -> Option<u16> {
     if let Some(max) = part_1(input) {
         if let Some(min) = minimum(input) {
             for i in (min + 1)..max {
-                if let None = input.iter().find(|&s| s.0 == i) {
+                if !input.iter().any(|s| s.0 == i) {
                     return Some(i);
                 }
             }

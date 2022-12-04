@@ -3,7 +3,7 @@ use std::str::FromStr;
 use recap::Recap;
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize, Hash, PartialEq, Recap)]
+#[derive(Debug, Deserialize, Hash, PartialEq, Eq, Recap)]
 #[recap(regex = r#"(?x)
     (?P<number_1>\d+)
     -

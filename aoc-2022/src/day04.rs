@@ -4,9 +4,9 @@ pub fn parse(input: &str) -> Vec<(RangeInclusive<u8>, RangeInclusive<u8>)> {
     input
         .lines()
         .map(|line| {
-            let elves = line.split_once(",").unwrap();
-            let left = elves.0.split_once("-").unwrap();
-            let right = elves.1.split_once("-").unwrap();
+            let elves = line.split_once(',').unwrap();
+            let left = elves.0.split_once('-').unwrap();
+            let right = elves.1.split_once('-').unwrap();
             (
                 u8::from_str_radix(left.0, 10).unwrap()..=u8::from_str_radix(left.1, 10).unwrap(),
                 u8::from_str_radix(right.0, 10).unwrap()..=u8::from_str_radix(right.1, 10).unwrap(),
@@ -17,7 +17,7 @@ pub fn parse(input: &str) -> Vec<(RangeInclusive<u8>, RangeInclusive<u8>)> {
 
 pub fn part1(input: &[(RangeInclusive<u8>, RangeInclusive<u8>)]) -> usize {
     input
-        .into_iter()
+        .iter()
         .filter(|(left, right)| {
             left.start() <= right.start() && left.end() >= right.end()
                 || right.start() <= left.start() && right.end() >= left.end()
@@ -27,7 +27,7 @@ pub fn part1(input: &[(RangeInclusive<u8>, RangeInclusive<u8>)]) -> usize {
 
 pub fn part2(input: &[(RangeInclusive<u8>, RangeInclusive<u8>)]) -> usize {
     input
-        .into_iter()
+        .iter()
         .filter(|(left, right)| {
             left.contains(right.start())
                 || left.contains(right.end())

@@ -2,7 +2,7 @@ use std::{collections::HashSet, hash::Hash, hash::Hasher, str::FromStr};
 
 use anyhow::Result;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Answer(HashSet<char>);
 
 impl FromStr for Answer {
@@ -21,7 +21,7 @@ impl Hash for Answer {
     }
 }
 
-#[derive(Debug, Hash, PartialEq)]
+#[derive(Debug, Hash, PartialEq, Eq)]
 pub struct AnswerSet(Vec<Answer>);
 
 impl FromStr for AnswerSet {
@@ -42,7 +42,7 @@ impl AnswerSet {
     fn all(&self) -> Option<HashSet<&char>> {
         self.0.iter().fold(None, |acc: Option<HashSet<&char>>, hs| {
             let hs = hs.0.iter().collect();
-            acc.map(|a| a.intersection(&hs).map(|s| *s).collect())
+            acc.map(|a| a.intersection(&hs).copied().collect())
                 .or(Some(hs))
         })
     }
@@ -53,13 +53,13 @@ pub fn parse(input: &str) -> Result<Vec<AnswerSet>> {
 }
 
 pub fn part_1(input: &[AnswerSet]) -> usize {
-    input.into_iter().map(|set| set.any().iter().count()).sum()
+    input.iter().map(|set| set.any().len()).sum()
 }
 
 pub fn part_2(input: &[AnswerSet]) -> usize {
     input
-        .into_iter()
-        .map(|set| set.all().map(|hs| hs.iter().count()).unwrap_or_default())
+        .iter()
+        .map(|set| set.all().map(|hs| hs.len()).unwrap_or_default())
         .sum()
 }
 

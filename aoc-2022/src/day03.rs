@@ -4,11 +4,11 @@ pub fn parse(input: &str) -> Vec<&str> {
 
 pub fn part1(input: &[&str]) -> u32 {
     input
-        .into_iter()
+        .iter()
         .map(|line| (&line[..line.len() / 2], &line[line.len() / 2..]))
         .filter_map(|rucksack| {
             for c in rucksack.0.chars() {
-                if rucksack.1.chars().find(|other| other.eq(&c)).is_some() {
+                if rucksack.1.chars().any(|other| other.eq(&c)) {
                     if c.is_uppercase() {
                         return Some(c as u32 - 38);
                     } else {
@@ -27,13 +27,11 @@ pub fn part2(input: &[&str]) -> u32 {
         .chunks_exact(3)
         .filter_map(|group| {
             for c in group[0].chars() {
-                if group[1].chars().find(|other| other.eq(&c)).is_some() {
-                    if group[2].chars().find(|other| other.eq(&c)).is_some() {
-                        if c.is_uppercase() {
-                            return Some(c as u32 - 38);
-                        } else {
-                            return Some(c as u32 - 96);
-                        }
+                if group[1].chars().any(|other| other.eq(&c)) && group[2].chars().any(|other| other.eq(&c)) {
+                    if c.is_uppercase() {
+                        return Some(c as u32 - 38);
+                    } else {
+                        return Some(c as u32 - 96);
                     }
                 }
             }
