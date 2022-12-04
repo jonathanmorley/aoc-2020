@@ -94,7 +94,7 @@ impl FromStr for Height {
     }
 }
 
-#[derive(Debug)]
+#[allow(dead_code)]
 struct ValidatedCredentials {
     birth_year: u32,
     issue_year: u32,

@@ -1,7 +1,6 @@
 use anyhow::Result;
 use itertools::Itertools;
-use std::convert::TryFrom;
-use std::{num::TryFromIntError, str::FromStr};
+use std::str::FromStr;
 
 #[derive(Debug, Hash, PartialEq)]
 pub struct Seat(u16);
@@ -19,16 +18,6 @@ impl FromStr for Seat {
             .join("");
 
         Ok(Seat(u16::from_str_radix(&binary_id, 2)?))
-    }
-}
-
-impl Seat {
-    pub fn row(&self) -> Result<u8, TryFromIntError> {
-        u8::try_from(self.0 / 8)
-    }
-
-    pub fn column(&self) -> Result<u8, TryFromIntError> {
-        u8::try_from(self.0 % 8)
     }
 }
 
