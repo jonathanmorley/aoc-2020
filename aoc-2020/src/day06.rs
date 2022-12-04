@@ -40,13 +40,11 @@ impl AnswerSet {
     }
 
     fn all(&self) -> Option<HashSet<&char>> {
-        self.0
-            .iter()
-            .fold(None, |acc: Option<HashSet<&char>>, hs| {
-                let hs = hs.0.iter().collect();
-                acc.map(|a| a.intersection(&hs).map(|s| *s).collect())
-                    .or(Some(hs))
-            })
+        self.0.iter().fold(None, |acc: Option<HashSet<&char>>, hs| {
+            let hs = hs.0.iter().collect();
+            acc.map(|a| a.intersection(&hs).map(|s| *s).collect())
+                .or(Some(hs))
+        })
     }
 }
 
@@ -59,7 +57,10 @@ pub fn part_1(input: &[AnswerSet]) -> usize {
 }
 
 pub fn part_2(input: &[AnswerSet]) -> usize {
-    input.into_iter().map(|set| set.all().map(|hs| hs.iter().count()).unwrap_or_default()).sum()
+    input
+        .into_iter()
+        .map(|set| set.all().map(|hs| hs.iter().count()).unwrap_or_default())
+        .sum()
 }
 
 #[cfg(test)]
@@ -87,9 +88,7 @@ b";
         assert_eq!(
             parse(SAMPLE)?,
             vec![
-                AnswerSet(vec![
-                    Answer(vec!['a', 'c', 'b'].into_iter().collect())
-                ]),
+                AnswerSet(vec![Answer(vec!['a', 'c', 'b'].into_iter().collect())]),
                 AnswerSet(vec![
                     Answer(vec!['a'].into_iter().collect()),
                     Answer(vec!['b'].into_iter().collect()),
@@ -105,9 +104,7 @@ b";
                     Answer(vec!['a'].into_iter().collect()),
                     Answer(vec!['a'].into_iter().collect())
                 ]),
-                AnswerSet(vec![
-                    Answer(vec!['b'].into_iter().collect())
-                ]),
+                AnswerSet(vec![Answer(vec!['b'].into_iter().collect())]),
             ]
         );
         Ok(())
@@ -116,26 +113,32 @@ b";
     #[test]
     fn test_any() -> Result<()> {
         let parsed = parse(SAMPLE)?;
-        assert_eq!(parsed.iter().map(|set| set.any()).collect::<Vec<_>>(), vec![
-            vec!['a', 'b', 'c'].iter().collect(),
-            vec!['a', 'b', 'c'].iter().collect(),
-            vec!['a', 'b', 'c'].iter().collect(),
-            vec!['a'].iter().collect(),
-            vec!['b'].iter().collect()
-        ]);
+        assert_eq!(
+            parsed.iter().map(|set| set.any()).collect::<Vec<_>>(),
+            vec![
+                vec!['a', 'b', 'c'].iter().collect(),
+                vec!['a', 'b', 'c'].iter().collect(),
+                vec!['a', 'b', 'c'].iter().collect(),
+                vec!['a'].iter().collect(),
+                vec!['b'].iter().collect()
+            ]
+        );
         Ok(())
     }
 
     #[test]
     fn test_all() -> Result<()> {
         let parsed = parse(SAMPLE)?;
-        assert_eq!(parsed.iter().map(|set| set.all()).collect::<Vec<_>>(), vec![
-            Some(vec!['a', 'b', 'c'].iter().collect()),
-            Some(vec![].iter().collect()),
-            Some(vec!['a'].iter().collect()),
-            Some(vec!['a'].iter().collect()),
-            Some(vec!['b'].iter().collect())
-        ]);
+        assert_eq!(
+            parsed.iter().map(|set| set.all()).collect::<Vec<_>>(),
+            vec![
+                Some(vec!['a', 'b', 'c'].iter().collect()),
+                Some(vec![].iter().collect()),
+                Some(vec!['a'].iter().collect()),
+                Some(vec!['a'].iter().collect()),
+                Some(vec!['b'].iter().collect())
+            ]
+        );
         Ok(())
     }
 

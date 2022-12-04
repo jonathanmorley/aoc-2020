@@ -9,7 +9,10 @@ jobs:
   verify:
     strategy:
       matrix:
-        cmd: [test, clippy]
+        cmd:
+          - test --workspace
+          - clippy --workspace
+          - fmt --check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,4 +26,4 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Run ${{ matrix.cmd }}
-        run: cargo ${{ matrix.cmd }} --workspace
+        run: cargo ${{ matrix.cmd }}

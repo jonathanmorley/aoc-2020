@@ -1,6 +1,7 @@
 #[allow(clippy::identity_op)]
 pub fn part1(input: &str) -> usize {
-    input.lines()
+    input
+        .lines()
         .map(|event| match event {
             "A X" => 1 + 3,
             "A Y" => 2 + 6,
@@ -11,14 +12,15 @@ pub fn part1(input: &str) -> usize {
             "C X" => 1 + 6,
             "C Y" => 2 + 0,
             "C Z" => 3 + 3,
-            _ => unreachable!()
+            _ => unreachable!(),
         })
         .sum::<usize>()
 }
 
 #[allow(clippy::identity_op)]
 pub fn part2(input: &str) -> usize {
-    input.lines()
+    input
+        .lines()
         .map(|event| match event {
             "A X" => 3 + 0,
             "A Y" => 1 + 3,
@@ -29,7 +31,7 @@ pub fn part2(input: &str) -> usize {
             "C X" => 2 + 0,
             "C Y" => 3 + 3,
             "C Z" => 1 + 6,
-            _ => unreachable!()
+            _ => unreachable!(),
         })
         .sum::<usize>()
 }

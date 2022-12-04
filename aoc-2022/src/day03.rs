@@ -5,38 +5,42 @@ pub fn parse(input: &str) -> Vec<&str> {
 pub fn part1(input: &[&str]) -> u32 {
     input
         .into_iter()
-        .map(|line| (&line[..line.len() / 2], &line[line.len()/2..]))
+        .map(|line| (&line[..line.len() / 2], &line[line.len() / 2..]))
         .filter_map(|rucksack| {
             for c in rucksack.0.chars() {
                 if rucksack.1.chars().find(|other| other.eq(&c)).is_some() {
                     if c.is_uppercase() {
-                        return Some(c as u32 - 38)
+                        return Some(c as u32 - 38);
                     } else {
-                        return Some(c as u32 - 96)
+                        return Some(c as u32 - 96);
                     }
                 }
             }
 
             None
-        }).sum::<u32>()
+        })
+        .sum::<u32>()
 }
 
 pub fn part2(input: &[&str]) -> u32 {
-    input.chunks_exact(3).filter_map(|group| {
-        for c in group[0].chars() {
-            if group[1].chars().find(|other| other.eq(&c)).is_some() {
-                if group[2].chars().find(|other| other.eq(&c)).is_some() {
-                    if c.is_uppercase() {
-                        return Some(c as u32 - 38)
-                    } else {
-                        return Some(c as u32 - 96)
+    input
+        .chunks_exact(3)
+        .filter_map(|group| {
+            for c in group[0].chars() {
+                if group[1].chars().find(|other| other.eq(&c)).is_some() {
+                    if group[2].chars().find(|other| other.eq(&c)).is_some() {
+                        if c.is_uppercase() {
+                            return Some(c as u32 - 38);
+                        } else {
+                            return Some(c as u32 - 96);
+                        }
                     }
                 }
             }
-        }
 
-        None
-    }).sum()
+            None
+        })
+        .sum()
 }
 
 #[cfg(test)]

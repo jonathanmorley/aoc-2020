@@ -1,24 +1,33 @@
-
 use std::num::ParseIntError;
 
 use itertools::Itertools;
 
 fn generator(input: &str) -> Result<Vec<Vec<u32>>, ParseIntError> {
-    input.split("\n\n").into_iter().map(|chunk| {
-        chunk.lines().map(str::parse).collect()
-    }).collect()
+    input
+        .split("\n\n")
+        .into_iter()
+        .map(|chunk| chunk.lines().map(str::parse).collect())
+        .collect()
 }
 
 pub fn part1(input: &str) -> usize {
-    generator(input).unwrap().into_iter().map(|calories| {
-        calories.into_iter().sum::<u32>()
-    }).max().unwrap() as usize
+    generator(input)
+        .unwrap()
+        .into_iter()
+        .map(|calories| calories.into_iter().sum::<u32>())
+        .max()
+        .unwrap() as usize
 }
 
 pub fn part2(input: &str) -> usize {
-    generator(input).unwrap().into_iter().map(|calories| {
-        calories.into_iter().sum::<u32>()
-    }).sorted().rev().take(3).sum::<u32>() as usize
+    generator(input)
+        .unwrap()
+        .into_iter()
+        .map(|calories| calories.into_iter().sum::<u32>())
+        .sorted()
+        .rev()
+        .take(3)
+        .sum::<u32>() as usize
 }
 
 #[cfg(test)]
