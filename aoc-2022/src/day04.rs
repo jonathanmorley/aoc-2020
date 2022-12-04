@@ -8,8 +8,8 @@ pub fn parse(input: &str) -> Vec<(RangeInclusive<u8>, RangeInclusive<u8>)> {
             let left = elves.0.split_once('-').unwrap();
             let right = elves.1.split_once('-').unwrap();
             (
-                u8::from_str_radix(left.0, 10).unwrap()..=u8::from_str_radix(left.1, 10).unwrap(),
-                u8::from_str_radix(right.0, 10).unwrap()..=u8::from_str_radix(right.1, 10).unwrap(),
+                left.0.parse::<u8>().unwrap()..=left.1.parse::<u8>().unwrap(),
+                right.0.parse::<u8>().unwrap()..=right.1.parse::<u8>().unwrap(),
             )
         })
         .collect()

@@ -37,7 +37,7 @@ impl Stack {
 
     pub fn run(&mut self) -> Result<&Stack> {
         loop {
-            if let None = self.apply()? {
+            if (self.apply()?).is_none() {
                 return Ok(self);
             }
         }
