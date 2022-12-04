@@ -10,7 +10,7 @@ use nom::{
 };
 use num::rational::Ratio;
 
-#[derive(Debug, Clone, Eq, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 struct Coordinate {
     x: u32,
     y: u32,
@@ -19,6 +19,12 @@ struct Coordinate {
 impl Ord for Coordinate {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.x.cmp(&other.x).then(self.y.cmp(&other.y))
+    }
+}
+
+impl PartialOrd for Coordinate {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.x.cmp(&other.x).then(self.y.cmp(&other.y)))
     }
 }
 

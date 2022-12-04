@@ -1,23 +1,15 @@
-use std::{collections::HashSet, hash::Hash, hash::Hasher, str::FromStr};
+use std::{collections::{HashSet, BTreeSet}, hash::Hash, str::FromStr};
 
 use anyhow::Result;
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct Answer(HashSet<char>);
+#[derive(Debug, PartialEq, Eq, Hash)]
+pub struct Answer(BTreeSet<char>);
 
 impl FromStr for Answer {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Answer(s.chars().filter(|&c| c != '\n').collect()))
-    }
-}
-
-impl Hash for Answer {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        for value in &self.0 {
-            value.hash(state);
-        }
     }
 }
 
