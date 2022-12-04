@@ -127,7 +127,7 @@ fn generator(input: &str) -> (Paper, Vec<Fold>) {
 
 pub fn part1(input: &str) -> usize {
     let (paper, folds) = generator(input);
-    let mut paper = paper.to_owned();
+    let mut paper = paper;
 
     paper.fold(&folds[0]);
 
@@ -136,7 +136,7 @@ pub fn part1(input: &str) -> usize {
 
 pub fn part2(input: &str) -> String {
     let (paper, folds) = generator(input);
-    let mut paper = paper.to_owned();
+    let mut paper = paper;
 
     for fold in folds {
         paper.fold(&fold);

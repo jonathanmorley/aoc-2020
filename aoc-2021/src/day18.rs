@@ -159,8 +159,8 @@ impl Add for Snailfish {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
-        if self.0 == "" {
-            return other;
+        if self.0.is_empty() {
+            other
         } else {
             let mut sum = Snailfish(format!("[{},{}]", self.0, other.0));
             sum.reduce();

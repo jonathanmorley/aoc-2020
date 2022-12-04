@@ -148,14 +148,14 @@ fn generator(input: &str) -> OctopusGrid {
 
 pub fn part1(input: &str) -> usize {
     let input = generator(input);
-    let mut octopodes = input.to_owned();
+    let mut octopodes = input;
 
     (0..100).map(|_| octopodes.step()).sum()
 }
 
 pub fn part2(input: &str) -> usize {
     let input = generator(input);
-    let mut octopodes = input.to_owned();
+    let mut octopodes = input;
 
     (1..)
         .map(|step| (step, octopodes.step()))

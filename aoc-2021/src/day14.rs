@@ -36,7 +36,7 @@ fn generator_part1(input: &str) -> (Template, Rules) {
 pub fn part1(input: &str) -> u64 {
     let (template, rules) = generator_part1(input);
 
-    let mut template = template.to_owned();
+    let mut template = template;
 
     for _ in 0..10 {
         for (i, window) in template.clone().windows(2).enumerate() {
@@ -103,7 +103,7 @@ pub fn part2(input: &str) -> u64 {
     let (first, last) = (template[0], template.last().unwrap());
 
     *letter_counts.get_mut(&first).unwrap() += 1;
-    *letter_counts.get_mut(&last).unwrap() += 1;
+    *letter_counts.get_mut( last).unwrap() += 1;
 
     let (min, max) = letter_counts
         .iter()

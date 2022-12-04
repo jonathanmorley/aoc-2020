@@ -17,7 +17,7 @@ pub fn part1(input: &str) -> u32 {
         .map(|align| {
             input
                 .iter()
-                .map(|crab| (*crab as i64 - align as i64).abs() as u32)
+                .map(|crab| (*crab as i64 - align as i64).unsigned_abs() as u32)
                 .sum()
         })
         .min()
@@ -33,7 +33,7 @@ pub fn part2(input: &str) -> u32 {
         .map(|align| {
             input
                 .iter()
-                .map(|crab| (*crab as i64 - align as i64).abs() as u32)
+                .map(|crab| (*crab as i64 - align as i64).unsigned_abs() as u32)
                 .map(|distance| (distance * (distance + 1)) / 2)
                 .sum()
         })

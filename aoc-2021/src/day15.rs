@@ -20,7 +20,7 @@ pub fn part1(input: &str) -> u64 {
 
     let mut graph = DiGraphMap::new();
 
-    for (location, _) in &nodes {
+    for location in nodes.keys() {
         for (dx, dy) in [(0, 1), (1, 0), (-1, 0), (0, -1)] {
             let neighbour = (location.0 + dx, location.1 + dy);
 
@@ -37,7 +37,7 @@ pub fn part1(input: &str) -> u64 {
         (0, 0),
         |finish| finish == max,
         |(_, _, weight)| *weight,
-        |(x, y)| ((max.0 - x) + (max.1 - y)).abs() as u64,
+        |(x, y)| ((max.0 - x) + (max.1 - y)).unsigned_abs() as u64,
     )
     .unwrap()
     .0
@@ -72,7 +72,7 @@ pub fn part2(input: &str) -> u64 {
 
     let mut graph = DiGraphMap::new();
 
-    for (location, _) in &nodes {
+    for location in nodes.keys() {
         for (dx, dy) in [(0, 1), (1, 0), (-1, 0), (0, -1)] {
             let neighbour = (location.0 + dx, location.1 + dy);
 
@@ -89,7 +89,7 @@ pub fn part2(input: &str) -> u64 {
         (0, 0),
         |finish| finish == max,
         |(_, _, weight)| *weight,
-        |(x, y)| ((max.0 - x) + (max.1 - y)).abs() as u64,
+        |(x, y)| ((max.0 - x) + (max.1 - y)).unsigned_abs() as u64,
     )
     .unwrap()
     .0

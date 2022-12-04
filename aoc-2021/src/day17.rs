@@ -14,8 +14,8 @@ type Velocity = (i32, i32);
 type Position = (i32, i32);
 
 fn parse_i32(input: &str) -> IResult<&str, i32> {
-    let (input, int) = map_res(take_while1(|c: char| c.is_dec_digit() || c == '-'), |s| {
-        i32::from_str_radix(s, 10)
+    let (input, int) = map_res(take_while1(|c: char| c.is_dec_digit() || c == '-'), |s: &str| {
+        s.parse::<i32>()
     })(input)?;
 
     Ok((input, int))
@@ -69,7 +69,7 @@ fn positions(velocity: Velocity, target: &Target) -> Vec<Position> {
     while !past_target(&position, target) {
         step(&mut position, &mut velocity);
 
-        positions.push(position.clone());
+        positions.push(position);
     }
 
     positions

@@ -24,7 +24,7 @@ impl HeightMap {
             },
         ]
         .into_iter()
-        .filter_map(|x| x)
+        .flatten()
         .collect()
     }
 
@@ -34,7 +34,7 @@ impl HeightMap {
         self.neighbours(x, y)
             .into_iter()
             .map(|(x, y)| self.get(x, y).unwrap())
-            .all(|neighbour| neighbour > &value)
+            .all(|neighbour| neighbour > value)
     }
 
     fn local_minima(&self) -> Vec<(usize, usize)> {
@@ -115,10 +115,9 @@ pub fn part1(input: &str) -> u32 {
 }
 
 pub fn part2(input: &str) -> u64 {
-    let input = generator(input);
+    let mut input = generator(input);
 
     input
-        .to_owned()
         .extract_basins()
         .into_iter()
         .map(|basin| basin.len() as u64)

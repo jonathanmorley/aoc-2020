@@ -1,4 +1,4 @@
-use std::hash::{Hash, Hasher};
+use std::hash::Hash;
 use std::{
     collections::{BTreeSet, HashSet},
     str::FromStr,
@@ -20,16 +20,8 @@ enum Signal {
     G,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 struct SignalDigit(BTreeSet<Signal>);
-
-impl Hash for SignalDigit {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        for entry in self.0.iter() {
-            entry.hash(state);
-        }
-    }
-}
 
 impl FromStr for SignalDigit {
     type Err = anyhow::Error;
@@ -117,8 +109,7 @@ impl DisplayReading {
             .iter()
             .filter(|x| x.as_u8s().unwrap().contains(&6))
             .filter(|x| *x != zero)
-            .filter(|x| *x != nine)
-            .next()
+            .find(|x| *x != nine)
             .unwrap();
 
         self.digit_map.insert(six.to_owned(), 6);
@@ -131,8 +122,7 @@ impl DisplayReading {
             .patterns
             .iter()
             .filter(|x| x.as_u8s().unwrap().contains(&5))
-            .filter(|x| x.0.is_subset(&six.0))
-            .next()
+            .find(|x| x.0.is_subset(&six.0))
             .unwrap();
 
         self.digit_map.insert(five.to_owned(), 5);
@@ -147,8 +137,7 @@ impl DisplayReading {
             .iter()
             .filter(|x| x.as_u8s().unwrap().contains(&5))
             .filter(|x| *x != five)
-            .filter(|x| *x != three)
-            .next()
+            .find(|x| *x != three)
             .unwrap();
 
         self.digit_map.insert(two.to_owned(), 2);
@@ -216,7 +205,7 @@ pub fn part1(input: &str) -> usize {
 pub fn part2(input: &str) -> u32 {
     let input = generator(input);
 
-    let mut readings = input.to_owned();
+    let mut readings = input;
 
     for reading in readings.iter_mut() {
         reading.update_digit_map();
