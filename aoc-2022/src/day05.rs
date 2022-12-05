@@ -4,7 +4,7 @@ pub type Crates = BTreeMap<usize, Vec<char>>;
 
 #[derive(Debug)]
 pub struct Instruction {
-    n: u8,
+    n: usize,
     from: usize,
     to: usize,
 }
@@ -63,18 +63,11 @@ pub fn part2((crates, instructions): &(Crates, Vec<Instruction>)) -> String {
     let mut crates = crates.clone();
 
     for Instruction { n, from, to } in instructions {
-        let mut crate_mover_9001_stack = Vec::new();
-
-        for _ in 0..*n {
-            crate_mover_9001_stack.push(crates.get_mut(from).unwrap().pop().unwrap());
-        }
-
-        for _ in 0..*n {
-            crates
-                .get_mut(to)
-                .unwrap()
-                .push(crate_mover_9001_stack.pop().unwrap());
-        }
+        let from_stack = crates.get_mut(from).unwrap();
+        let mut transfer = from_stack
+            .drain((from_stack.len() - *n)..)
+            .collect::<Vec<_>>();
+        crates.get_mut(to).unwrap().append(&mut transfer);
     }
 
     crates
