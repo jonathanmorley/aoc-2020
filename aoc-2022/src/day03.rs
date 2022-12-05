@@ -27,7 +27,9 @@ pub fn part2(input: &[&str]) -> u32 {
         .chunks_exact(3)
         .filter_map(|group| {
             for c in group[0].chars() {
-                if group[1].chars().any(|other| other.eq(&c)) && group[2].chars().any(|other| other.eq(&c)) {
+                if group[1].chars().any(|other| other.eq(&c))
+                    && group[2].chars().any(|other| other.eq(&c))
+                {
                     if c.is_uppercase() {
                         return Some(c as u32 - 38);
                     } else {

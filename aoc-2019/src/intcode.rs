@@ -49,7 +49,8 @@ impl Stack {
 
     fn read(&self, index: usize) -> Result<usize> {
         self.memory
-            .get(index).copied()
+            .get(index)
+            .copied()
             .ok_or_else(|| anyhow!("Index {} does not exist", index))
     }
 

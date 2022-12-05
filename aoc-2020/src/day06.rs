@@ -1,4 +1,8 @@
-use std::{collections::{HashSet, BTreeSet}, hash::Hash, str::FromStr};
+use std::{
+    collections::{BTreeSet, HashSet},
+    hash::Hash,
+    str::FromStr,
+};
 
 use anyhow::Result;
 

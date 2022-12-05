@@ -103,7 +103,7 @@ pub fn part2(input: &str) -> u64 {
     let (first, last) = (template[0], template.last().unwrap());
 
     *letter_counts.get_mut(&first).unwrap() += 1;
-    *letter_counts.get_mut( last).unwrap() += 1;
+    *letter_counts.get_mut(last).unwrap() += 1;
 
     let (min, max) = letter_counts
         .iter()

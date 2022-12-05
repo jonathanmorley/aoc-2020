@@ -14,9 +14,10 @@ type Velocity = (i32, i32);
 type Position = (i32, i32);
 
 fn parse_i32(input: &str) -> IResult<&str, i32> {
-    let (input, int) = map_res(take_while1(|c: char| c.is_dec_digit() || c == '-'), |s: &str| {
-        s.parse::<i32>()
-    })(input)?;
+    let (input, int) = map_res(
+        take_while1(|c: char| c.is_dec_digit() || c == '-'),
+        |s: &str| s.parse::<i32>(),
+    )(input)?;
 
     Ok((input, int))
 }
