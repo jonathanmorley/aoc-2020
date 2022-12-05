@@ -1,7 +1,5 @@
 use std::collections::BTreeMap;
 
-use itertools::Itertools;
-
 pub type Crates = BTreeMap<usize, Vec<char>>;
 
 #[derive(Debug)]
@@ -58,7 +56,7 @@ pub fn part1((crates, instructions): &(Crates, Vec<Instruction>)) -> String {
     crates
         .into_values()
         .map(|mut stack| stack.pop().unwrap())
-        .join("")
+        .collect()
 }
 
 pub fn part2((crates, instructions): &(Crates, Vec<Instruction>)) -> String {
@@ -82,7 +80,7 @@ pub fn part2((crates, instructions): &(Crates, Vec<Instruction>)) -> String {
     crates
         .into_values()
         .map(|mut stack| stack.pop().unwrap())
-        .join("")
+        .collect()
 }
 
 #[cfg(test)]
