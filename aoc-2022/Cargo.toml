@@ -9,3 +9,4 @@ edition = "2021"
 [dependencies]
 aoc-main = { version = "0.4.1", features = ["bench"] }
 itertools = "0.10.1"
+nom = "7.1.1"
