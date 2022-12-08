@@ -5,6 +5,7 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 aoc_main::main! {
   year 2022;
@@ -15,4 +16,5 @@ aoc_main::main! {
   day05 :parse      => part1, part2;
   day06             => part1, part2_hashset, part2_loops;
   day07 :parse      => part1, part2;
+  day08 :parse      => part1, part2;
 }
