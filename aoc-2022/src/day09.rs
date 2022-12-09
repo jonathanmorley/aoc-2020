@@ -55,25 +55,30 @@ pub fn part1(input: &[&str]) -> usize {
 }
 
 pub fn part2(input: &[&str]) -> usize {
+    const KNOTS: usize = 10;
+
     let mut tail_history: Vec<Location> = Vec::new();
-    let mut knots = [Location::default(); 10];
+    let mut knots = [Location::default(); KNOTS];
 
     for line in input {
         if let Some((direction, n)) = line.split_once(' ') {
             for _ in 0..n.parse().unwrap() {
+                // move head
                 match direction {
-                    "L" => knots[0].0 -= 1,
-                    "R" => knots[0].0 += 1,
-                    "D" => knots[0].1 -= 1,
-                    "U" => knots[0].1 += 1,
+                    "L" => knots.first_mut().unwrap().0 -= 1,
+                    "R" => knots.first_mut().unwrap().0 += 1,
+                    "D" => knots.first_mut().unwrap().1 -= 1,
+                    "U" => knots.first_mut().unwrap().1 += 1,
                     _ => unreachable!(),
                 }
 
-                for i in 1..10 {
+                // move the rest of the rope
+                for i in 1..knots.len() {
                     knots[i] = update(&knots[i - 1], knots[i]);
                 }
 
-                tail_history.push(knots[9]);
+                // track the motion of the last knot
+                tail_history.push(knots.last().unwrap().to_owned());
             }
         }
     }
