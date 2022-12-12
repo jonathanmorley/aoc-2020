@@ -71,6 +71,7 @@ dependencies = [
  "aoc-main 0.5.0",
  "grid",
  "itertools 0.10.5",
+ "num-bigint",
 ]
 
 [[package]]
