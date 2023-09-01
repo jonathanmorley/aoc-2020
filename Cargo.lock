@@ -72,6 +72,7 @@ dependencies = [
  "grid",
  "itertools 0.10.5",
  "num-bigint",
+ "petgraph",
 ]
 
 [[package]]

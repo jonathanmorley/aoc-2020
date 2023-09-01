@@ -105,7 +105,7 @@ pub fn part1(input: &[Monkey]) -> u128 {
 pub fn part2(input: &[Monkey]) -> u128 {
     let monkeys = input.to_vec();
     let mut activity = vec![0u128; monkeys.len()];
-    let large_modulo: u128 = monkeys.iter().map(|monkey| monkey.modulo).product();
+    let large_modulo: u128 = monkeys.into_iter().map(|monkey| monkey.modulo).product();
 
     for _ in 1..=10_000 {
         for (idx, monkey) in monkeys.iter().enumerate() {
