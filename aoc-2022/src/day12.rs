@@ -9,7 +9,9 @@ trait Grid {
 
 impl Grid for &str {
     fn get(&self, (row, col): (usize, usize)) -> Option<&u8> {
-        self.lines().nth(row).and_then(|line| line.as_bytes().get(col))
+        self.lines()
+            .nth(row)
+            .and_then(|line| line.as_bytes().get(col))
     }
 
     fn rows(&self) -> usize {
@@ -21,7 +23,8 @@ impl Grid for &str {
     }
 
     fn delta(&self, src: (usize, usize), dst: (usize, usize)) -> Option<u8> {
-        self.get(dst).and_then(|dst| self.get(src).map(|src| dst - src))
+        self.get(dst)
+            .and_then(|dst| self.get(src).map(|src| dst - src))
     }
 }
 
@@ -29,7 +32,7 @@ impl Grid for &str {
 pub struct Map {
     heightmap: Graph<(usize, usize), u32>,
     start: (usize, usize),
-    end: (usize, usize)
+    end: (usize, usize),
 }
 
 pub fn parse(input: &str) -> Map {
@@ -41,8 +44,6 @@ pub fn parse(input: &str) -> Map {
     for row in 0..input.rows() {
         for col in 0..input.cols() {
             heightmap.add_node((row, col));
-
-            
 
             dbg!((row, col));
         }
@@ -78,7 +79,6 @@ pub fn part1(input: &Map) -> u128 {
 }
 
 pub fn part2(input: &Map) -> u128 {
-
     todo!()
 }
 
