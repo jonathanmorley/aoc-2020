@@ -24,7 +24,7 @@ impl Ord for Coordinate {
 
 impl PartialOrd for Coordinate {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.x.cmp(&other.x).then(self.y.cmp(&other.y)))
+        Some(self.cmp(other))
     }
 }
 

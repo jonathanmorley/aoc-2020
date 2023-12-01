@@ -5,7 +5,6 @@ use itertools::Itertools;
 fn generator(input: &str) -> Result<Vec<Vec<u32>>, ParseIntError> {
     input
         .split("\n\n")
-        .into_iter()
         .map(|chunk| chunk.lines().map(str::parse).collect())
         .collect()
 }
