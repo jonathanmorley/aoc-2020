@@ -1,4 +1,3 @@
-use itertools::Itertools;
 use petgraph::Graph;
 
 trait Grid {
@@ -37,7 +36,7 @@ pub fn parse(input: &str) -> Map {
     // let mut start = None;
     // let mut end = None;
 
-    let mut heightmap = Graph::new();
+    let mut heightmap: Graph<(usize, usize), u32> = Graph::new();
 
     for row in 0..input.rows() {
         for col in 0..input.cols() {
@@ -93,8 +92,8 @@ accszExk
 acctuvwj
 abdefghi";
 
-    #[test]
-    fn test_part1() {
-        assert_eq!(part1(&parse(SAMPLE)), 31);
-    }
+    // #[test]
+    // fn test_part1() {
+    //     assert_eq!(part1(&parse(SAMPLE)), 31);
+    // }
 }

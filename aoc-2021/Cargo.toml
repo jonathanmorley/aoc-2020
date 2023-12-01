@@ -18,4 +18,4 @@ thiserror = "1.0.30"
 petgraph = "0.6.0"
 bitvec = "1.0.0"
 hex = "0.4.3"
-bitvec-nom = { git = 'https://github.com/XAMPPRocky/nom-bitvec', branch = 'main' }
+bitvec-nom2 = "0.2.0"
