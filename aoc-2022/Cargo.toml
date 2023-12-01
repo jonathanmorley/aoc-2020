@@ -8,7 +8,7 @@ edition = "2021"
 
 [dependencies]
 aoc-main = { workspace = true }
-grid = "0.9.0"
-itertools = "0.10"
+grid = "0.12.0"
+itertools = "0.12"
 num-bigint = "0.4.3"
 petgraph = "0.6.2"

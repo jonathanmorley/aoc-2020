@@ -7,4 +7,4 @@ edition = "2021"
 [dependencies]
 aoc-main = { workspace = true }
 anyhow = "1.0.34"
-itertools = "0.9.0"
+itertools = "0.12.0"

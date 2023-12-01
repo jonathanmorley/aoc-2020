@@ -63,7 +63,6 @@ pub fn part2(input: &str) -> u32 {
                 .unwrap()
                 .1;
 
-            dbg!(first_digit, last_digit);
             (first_digit * 10) + last_digit
         })
         .sum()

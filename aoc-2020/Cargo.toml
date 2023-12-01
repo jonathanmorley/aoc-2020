@@ -10,7 +10,7 @@ edition = "2021"
 aoc-main = { workspace = true }
 anyhow = "1.0.34"
 fnv = "1.0.7"
-itertools = "0.9.0"
+itertools = "0.12.0"
 lazy_static = "1.4.0"
 recap = "0.1.1"
 regex = "1.4.2"
