@@ -28,7 +28,7 @@ name = "aoc-2019"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "aoc-main 0.4.1",
+ "aoc-main",
  "itertools 0.9.0",
 ]
 
@@ -37,7 +37,7 @@ name = "aoc-2020"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "aoc-main 0.4.1",
+ "aoc-main",
  "fnv",
  "itertools 0.9.0",
  "lazy_static",
@@ -51,7 +51,7 @@ name = "aoc-2021"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "aoc-main 0.4.1",
+ "aoc-main",
  "bimap",
  "bitvec",
  "bitvec-nom",
@@ -68,7 +68,7 @@ dependencies = [
 name = "aoc-2022"
 version = "0.1.0"
 dependencies = [
- "aoc-main 0.5.0",
+ "aoc-main",
  "grid",
  "itertools 0.10.5",
  "num-bigint",
@@ -76,15 +76,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "aoc-main"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62d5083e3889fa15a9b6bccbd83284df128a050a0c0c2a4562f96544ace6b3e3"
+name = "aoc-2023"
+version = "0.1.0"
 dependencies = [
- "attohttpc",
- "clap 4.0.29",
- "colored",
- "dirs",
+ "aoc-main",
+ "grid",
+ "itertools 0.10.5",
+ "num-bigint",
+ "petgraph",
 ]
 
 [[package]]

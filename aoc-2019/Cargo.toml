@@ -5,6 +5,6 @@ authors = ["Morley, Jonathan <jmorley@cvent.com>"]
 edition = "2021"
 
 [dependencies]
-aoc-main = "0.4.1"
+aoc-main = { workspace = true }
 anyhow = "1.0.34"
 itertools = "0.9.0"

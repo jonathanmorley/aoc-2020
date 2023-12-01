@@ -1,5 +1,5 @@
 [package]
-name = "aoc-2020"
+name = "aoc-2023"
 version = "0.1.0"
 authors = ["Morley, Jonathan <jmorley@cvent.com>"]
 edition = "2021"
@@ -8,10 +8,7 @@ edition = "2021"
 
 [dependencies]
 aoc-main = { workspace = true }
-anyhow = "1.0.34"
-fnv = "1.0.7"
-itertools = "0.9.0"
-lazy_static = "1.4.0"
-recap = "0.1.1"
-regex = "1.4.2"
-serde = { version = "1.0", features = ["derive"] }
+grid = "0.9.0"
+itertools = "0.10"
+num-bigint = "0.4.3"
+petgraph = "0.6.2"
