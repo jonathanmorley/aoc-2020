@@ -11,7 +11,7 @@ fn generator(input: &str) -> Result<Vec<Vec<u32>>, ParseIntError> {
 
 pub fn part1(input: &str) -> usize {
     generator(input)
-        .unwrap()
+        .         unwrap()
         .into_iter()
         .map(|calories| calories.into_iter().sum::<u32>())
         .max()
