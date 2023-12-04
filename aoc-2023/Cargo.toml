@@ -9,6 +9,7 @@ edition = "2021"
 [dependencies]
 aoc-main = { workspace = true }
 from-pest = "0.3.2"
+grid = "0.12.0"
 nom = "7.1.3"
 pest = "2.7.5"
 pest-ast = "0.3.4"

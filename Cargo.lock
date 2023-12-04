@@ -129,6 +129,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-main",
  "from-pest",
+ "grid",
  "nom",
  "pest",
  "pest-ast",
