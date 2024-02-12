@@ -1,12 +1,12 @@
-use std::collections::HashSet;
-use std::collections::HashMap;
 use std::collections::hash_map::Entry;
+use std::collections::HashMap;
+use std::collections::HashSet;
 
 pub fn part1(input: &str) -> u64 {
     let columns = input.char_indices().find(|(_, c)| *c == '\n').unwrap().0;
     let rows = input.lines().count();
 
-    let mut part_numbers : Vec<u64> = Vec::new();
+    let mut part_numbers: Vec<u64> = Vec::new();
     let mut number: String = String::new();
     let mut part_number = false;
     for (i, c) in input.char_indices() {
@@ -16,18 +16,20 @@ pub fn part1(input: &str) -> u64 {
 
                 for dx in [-1, 0, 1] {
                     for dy in [-1, 0, 1] {
-                        let x = Ord::clamp((i % (columns+1)) as i32 + dx, 0, columns as i32) as usize;
-                        let y = Ord::clamp((i / (columns+1)) as i32 + dy, 0, rows as i32) as usize;
-                        
+                        let x =
+                            Ord::clamp((i % (columns + 1)) as i32 + dx, 0, columns as i32) as usize;
+                        let y =
+                            Ord::clamp((i / (columns + 1)) as i32 + dy, 0, rows as i32) as usize;
+
                         // +1 to include the newline character
-                        if let Some(value) = input.chars().nth(y * (columns+1) + x) {
+                        if let Some(value) = input.chars().nth(y * (columns + 1) + x) {
                             if value.is_ascii_punctuation() && value != '.' {
                                 part_number = true;
                             }
                         }
                     }
                 }
-            },
+            }
             _ => {
                 if !number.is_empty() && part_number {
                     part_numbers.push(number.parse().unwrap())
@@ -60,11 +62,13 @@ pub fn part2(input: &str) -> u64 {
 
                 for dx in [-1, 0, 1] {
                     for dy in [-1, 0, 1] {
-                        let x = Ord::clamp((i % (columns+1)) as i32 + dx, 0, columns as i32) as usize;
-                        let y = Ord::clamp((i / (columns+1)) as i32 + dy, 0, rows as i32) as usize;
-                        
+                        let x =
+                            Ord::clamp((i % (columns + 1)) as i32 + dx, 0, columns as i32) as usize;
+                        let y =
+                            Ord::clamp((i / (columns + 1)) as i32 + dy, 0, rows as i32) as usize;
+
                         // +1 to include the newline character
-                        let index = y * (columns+1) + x;
+                        let index = y * (columns + 1) + x;
                         if let Some(value) = input.chars().nth(index) {
                             if value == '*' {
                                 gears.insert(index);
@@ -72,7 +76,7 @@ pub fn part2(input: &str) -> u64 {
                         }
                     }
                 }
-            },
+            }
             _ => {
                 if !number.is_empty() && !gears.is_empty() {
                     part_numbers.push((number.parse().unwrap(), gears.clone()));
@@ -92,21 +96,26 @@ pub fn part2(input: &str) -> u64 {
     for (part_number, gears) in part_numbers {
         for gear in gears {
             match gear_numbers.entry(gear) {
-                Entry::Occupied(mut e) => { e.get_mut().push(part_number) },
-                Entry::Vacant(e) => { e.insert(vec![part_number]); }
+                Entry::Occupied(mut e) => e.get_mut().push(part_number),
+                Entry::Vacant(e) => {
+                    e.insert(vec![part_number]);
+                }
             }
         }
     }
 
-    gear_numbers.into_iter().filter(|e| e.1.len() == 2).map(|e| e.1.into_iter().product::<u64>()).sum()
+    gear_numbers
+        .into_iter()
+        .filter(|e| e.1.len() == 2)
+        .map(|e| e.1.into_iter().product::<u64>())
+        .sum()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    const SAMPLE_1: &str = 
-"467..114..
+    const SAMPLE_1: &str = "467..114..
 ...*......
 ..35..633.
 ......#...

@@ -1,30 +1,59 @@
-use nom::{
-    IResult,
-    bytes::complete::tag,
-    combinator::map_res, Finish, character::complete::digit1, multi::separated_list1};
-use nom::combinator::recognize;
 use nom::branch::alt;
 use nom::character::complete::char;
+use nom::combinator::recognize;
 use nom::sequence::separated_pair;
+use nom::{
+    bytes::complete::tag, character::complete::digit1, combinator::map_res, multi::separated_list1,
+    Finish, IResult,
+};
 
 #[derive(Debug)]
 struct CubeSet {
     red: u32,
     green: u32,
-    blue: u32
+    blue: u32,
 }
 
 impl CubeSet {
     fn parse(input: &str) -> IResult<&str, Self> {
-        let (input, counts): (_, Vec<(u32, _)>) = separated_list1(tag(", "),
-                separated_pair(map_res(recognize(digit1), str::parse), char(' '), alt((tag("red"), tag("green"), tag("blue"))))
+        let (input, counts): (_, Vec<(u32, _)>) = separated_list1(
+            tag(", "),
+            separated_pair(
+                map_res(recognize(digit1), str::parse),
+                char(' '),
+                alt((tag("red"), tag("green"), tag("blue"))),
+            ),
         )(input)?;
 
-        Ok((input, CubeSet {
-            red: counts.iter().find_map(|(count, colour)| if *colour == "red" { Some(*count) } else { None }).unwrap_or(0),
-            green: counts.iter().find_map(|(count, colour)| if *colour == "green" { Some(*count) } else { None }).unwrap_or(0),
-            blue: counts.iter().find_map(|(count, colour)| if *colour == "blue" { Some(*count) } else { None }).unwrap_or(0),
-        }))
+        Ok((
+            input,
+            CubeSet {
+                red: counts
+                    .iter()
+                    .find_map(|(count, colour)| if *colour == "red" { Some(*count) } else { None })
+                    .unwrap_or(0),
+                green: counts
+                    .iter()
+                    .find_map(|(count, colour)| {
+                        if *colour == "green" {
+                            Some(*count)
+                        } else {
+                            None
+                        }
+                    })
+                    .unwrap_or(0),
+                blue: counts
+                    .iter()
+                    .find_map(|(count, colour)| {
+                        if *colour == "blue" {
+                            Some(*count)
+                        } else {
+                            None
+                        }
+                    })
+                    .unwrap_or(0),
+            },
+        ))
     }
 
     fn power(&self) -> u64 {
@@ -35,7 +64,7 @@ impl CubeSet {
 #[derive(Debug)]
 struct Game {
     id: u32,
-    selections: Vec<CubeSet>
+    selections: Vec<CubeSet>,
 }
 
 impl Game {
@@ -44,7 +73,7 @@ impl Game {
         let (input, id) = map_res(recognize(digit1), str::parse)(input)?;
         let (input, _) = tag(": ")(input)?;
         let (input, selections) = separated_list1(tag("; "), CubeSet::parse)(input)?;
-        
+
         Ok((input, Game { id, selections }))
     }
 
@@ -58,25 +87,32 @@ impl Game {
 }
 
 fn generator(input: &str) -> Result<Vec<Game>, nom::error::Error<&str>> {
-    input.lines()
+    input
+        .lines()
         .map(|l| Game::parse(l).finish().map(|(_, game)| game))
         .collect()
 }
 
 pub fn part1(input: &str) -> u32 {
-   generator(input).unwrap()
+    generator(input)
+        .unwrap()
         .into_iter()
-        .filter(|game| game.selections.iter().all(|selection| selection.red <= 12 && selection.green <= 13 && selection.blue <= 14))
+        .filter(|game| {
+            game.selections.iter().all(|selection| {
+                selection.red <= 12 && selection.green <= 13 && selection.blue <= 14
+            })
+        })
         .map(|game| game.id)
         .sum()
 }
 
 pub fn part2(input: &str) -> u64 {
-    generator(input).unwrap()
-         .into_iter()
-         .map(|game| game.minimal().power())
-         .sum()
- }
+    generator(input)
+        .unwrap()
+        .into_iter()
+        .map(|game| game.minimal().power())
+        .sum()
+}
 
 #[cfg(test)]
 mod tests {
